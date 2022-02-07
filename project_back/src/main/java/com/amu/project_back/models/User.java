@@ -16,6 +16,9 @@ public class User {
     @Column(name = "uti_login")
     String username;
 
+    @Column(name= "uti_pass")
+    String password;
+
     @Column(name = "uti_poids")
     int weight;
 
@@ -24,6 +27,8 @@ public class User {
 
     @Column(name = "uti_droi-id")
     long rightId;
+
+    String token;
 
 
 

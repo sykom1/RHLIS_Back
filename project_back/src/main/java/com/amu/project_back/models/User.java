@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "utilisateurs")
 @Data
 public class User {
+
     @Id
     @GeneratedValue
     @Column(name = "uti_id")
@@ -23,12 +24,15 @@ public class User {
     int weight;
 
     @Column(name = "uti_banni")
-    int banned;
+    boolean banned;
 
-    @Column(name = "uti_droi-id")
-    long rightId;
+    @Column(name = "role")
+    long role;
 
-    String token;
+
+    public void setUser(User user){
+
+    }
 
 
 

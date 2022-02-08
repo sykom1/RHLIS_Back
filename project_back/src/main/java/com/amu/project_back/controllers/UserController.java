@@ -44,21 +44,20 @@ public class UserController {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-
-
     @GetMapping()
     public Iterable<User> getUser() {
         return repo.findAll();
     }
 
-    @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
-    Iterable<User> getByPage(@PathVariable int id) {
-
-        Page<User> pageData = repo.findAll(PageRequest.of(id, 20));
-
-        return pageData.getContent();
-
+    @GetMapping(value = "/users/{id}")
+    public User getUser(@PathVariable Integer id) {
+        return repo.getById(Long.valueOf(id));
     }
+    @GetMapping(value = "/referent/users/{id}")
+    public User getUserOfReferent(@PathVariable Integer id) {
+        return repo.getById(Long.valueOf(id));
+    }
+
 
     @PutMapping(value = "/users/{id}")
     public User modifyUser(@PathVariable Integer id, @RequestBody User newUser) {

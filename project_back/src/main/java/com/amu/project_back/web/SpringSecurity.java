@@ -1,5 +1,6 @@
 package com.amu.project_back.web;
 
+import com.amu.project_back.models.UserRole;
 import com.amu.project_back.security.JwtRequestFilter;
 import com.amu.project_back.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,11 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 			.authorizeRequests().antMatchers("/api/login").permitAll()
-			.antMatchers("/api/users").permitAll()
-			.antMatchers("/api/users/{id}").permitAll()
-			.antMatchers("/api/logout").permitAll()
+			.antMatchers("/api/users").hasAnyRole(UserRole.ADMIN.getAuthority(),
+						UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority(),UserRole.REFERENT.getAuthority())
+			.antMatchers("/api/users/{id}").hasAnyRole(UserRole.ADMIN.getAuthority(),
+						UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
+			.antMatchers("/api/logout").authenticated()
 			.antMatchers("/api/**").authenticated()
 			.anyRequest().permitAll()
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

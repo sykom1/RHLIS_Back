@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TokenEntityRepository extends JpaRepository<TokenEntity, Integer> {
 
-	public TokenEntity findByUserUsername(String username);
+	TokenEntity findByUserUsername(String username);
 	
-	public TokenEntity findByJwt(String jwt);
+	TokenEntity findByJwt(String jwt);
 }

@@ -1,7 +1,6 @@
 package com.amu.project_back.models;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity
@@ -12,26 +11,27 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "uti_id")
-    long id;
+    private long id;
 
     @Column(name = "uti_login")
-    String username;
+    private String username;
 
     @Column(name= "uti_pass")
-    String password;
-
-    @Column(name = "uti_poids")
-    int weight;
+    private String password;
 
     @Column(name = "uti_banni")
-    boolean banned;
+    private boolean banned;
 
-    @Column(name = "role")
-    long role;
+    @Column(name = "uti_role")
+    private UserRole role;
 
 
     public void setUser(User user){
-
+        this.id = user.id;
+        this.username = user.username;
+        this.password = user.password;
+        this.banned = user.banned;
+        this.role = user.role;
     }
 
 

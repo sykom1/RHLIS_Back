@@ -7,8 +7,6 @@ import com.amu.project_back.models.User;
 import com.amu.project_back.repository.TokenEntityRepository;
 import com.amu.project_back.repository.UserRepository;
 import com.amu.project_back.util.JwtUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-
-
 
 
     @Autowired
@@ -74,20 +70,18 @@ public class UserController {
     @PostMapping(value = "/users")
     public User saveUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         return repo.save(user);
-
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public User getUserById(@PathVariable Long id) {
         return repo.findById(id).get();
     }
 
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteUser(@PathVariable Long id) {
         repo.deleteById(id);
@@ -115,7 +109,6 @@ public class UserController {
         }
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
-
     }
 
     @PostMapping(value = "/logout")

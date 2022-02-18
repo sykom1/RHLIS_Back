@@ -1,154 +1,126 @@
 package com.amu.project_back.controllers;
+
+import com.amu.project_back.models.AuthenticationRequest;
+import com.amu.project_back.models.AuthenticationResponse;
+import com.amu.project_back.models.TokenEntity;
 import com.amu.project_back.models.User;
+import com.amu.project_back.repository.TokenEntityRepository;
 import com.amu.project_back.repository.UserRepository;
-import com.amu.project_back.services.UserService;
-import org.modelmapper.ModelMapper;
+import com.amu.project_back.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController {
 
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    UserRepository repo;
+
+    @Autowired
+    UserDetailsService userDetailsService;
 
 
-        @Autowired
-        UserRepository repo;
+    @Autowired
+    TokenEntityRepository tokenEntityRepository;
+
+    @Autowired
+    JwtUtil jwtTokenUtil;
+
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-        @Autowired
-        UserService service;
+    @GetMapping()
+    public Iterable<User> getUser() {
+        return repo.findAll();
+    }
+
+    @GetMapping(value = "/users/{id}")
+    public User getUser(@PathVariable Integer id) {
+        return repo.getById(Long.valueOf(id));
+    }
+    @GetMapping(value = "/referent/users/{id}")
+    public User getUserOfReferent(@PathVariable Integer id) {
+        return repo.getById(Long.valueOf(id));
+    }
+
+
+    @PutMapping(value = "/users/{id}")
+    public User modifyUser(@PathVariable Integer id, @RequestBody User newUser) {
+        User oldUser = repo.findById(Long.valueOf(id)).get();
+        oldUser.setUser(newUser);
+        return repo.save(oldUser);
+    }
+
+    @PostMapping(value = "/users")
+    public User saveUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repo.save(user);
+    }
+
+
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return repo.findById(id).get();
+    }
 
 
 
+    @DeleteMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteUser(@PathVariable Long id) {
+        repo.deleteById(id);
+    }
 
-        @GetMapping()
-        public Iterable<User> getUser() {
-            return repo.findAll();
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+                authenticationRequest.getPassword()));
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+        User user = repo.findByUsername(userDetails.getUsername());
+
+        TokenEntity tokenEntity = tokenEntityRepository.findByUserUsername(user.getUsername());
+
+        // Premiere Connexion
+        if (tokenEntity == null) {
+            tokenEntityRepository.save(new TokenEntity(jwt, user));
+        } else {
+            tokenEntity.setJwt(jwt);
+            tokenEntityRepository.save(tokenEntity);
         }
 
-        @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
-        Iterable<User> getByPage(@PathVariable int id) {
+        return ResponseEntity.ok(new AuthenticationResponse(jwt, user));
+    }
 
-            Page<User> pageData = repo.findAll(PageRequest.of(id, 20));
-
-            return pageData.getContent();
-
+    @PostMapping(value = "/logout")
+    public ResponseEntity<?> logout(@RequestBody String token) {
+        TokenEntity tokenEnt = tokenEntityRepository.findByJwt(token);
+        if(tokenEnt != null) {
+            Integer tokenId = tokenEnt.getId();
+            tokenEntityRepository.deleteById(tokenId);
         }
+        return ResponseEntity.ok("Déconnexion réussite");
+    }
 
 
-
-
-        @GetMapping("/{id}")
-        public User getUserById(@PathVariable Long id) {
-            return repo.findById(id).get();
-        }
-
-        @GetMapping("/mail/{username}")
-        public User getUserByusername(@PathVariable String username) {
-            username = username.toLowerCase();
-            return repo.findByUsername(username);
-        }
-
-
-
-        @DeleteMapping("/{id}")
-        @ResponseStatus(HttpStatus.NO_CONTENT)
-        void deleteUser(@PathVariable Long id) {
-            repo.deleteById(id);
-        }
-
-
-     /*   @PostMapping
-        User postUser(@RequestBody UserDTO UserDTO) {
-            ModelMapper mapper = new ModelMapper();
-            User User = mapper.map(UserDTO, User.class);
-            repo.save(User);
-            return User;
-
-        }
-*/
-        @PutMapping("/{id}")
-        public ResponseEntity<User> putUser(@PathVariable Long id, @Valid @RequestBody User u, @RequestHeader(value = "Authorization") String authorize) throws Exception {
-            String token = authorize.substring(7);
-            User user = repo.findById(id)
-                    .orElseThrow(() -> new Exception("User not found for this id : " + id));
-
-            String password = u.getPassword();
-
-            if(repo.findByToken(token) != null){
-                user.setUsername(u.getUsername().toLowerCase());
-
-
-                if(password != null && !password.equals("")){
-                    user.setPassword(service.getEncodedPass(u.getPassword()));
-                }
-
-
-                /*
-                user.setFirstname(u.getFirstname());
-                user.setLastname(u.getLastname());
-                user.setWebsite(u.getWebsite());
-                user.setBirthday(u.getBirthday());
-                user.setCv(u.getCv()); */
-
-                final User updatedUser = repo.save(user);
-                return ResponseEntity.ok(updatedUser);
-            }
-            return null;
-
-        }
-
-
-
-
-        @PostMapping("/signin")
-        public String login(//
-                            @RequestParam String username, //
-                            @RequestParam String password) {
-
-
-            return service.signin(username, password);
-        }
-
-
-        @PostMapping("/signup")
-        public void signup(@RequestBody User User,
-                           @RequestParam String username, //
-                           @RequestParam String password,@RequestHeader(value = "Authorization") String authorize) {
-            String token = authorize.substring(7);
-            if(repo.findByToken(token) != null){
-                User.setUsername(username.toLowerCase());
-                User.setPassword(password);
-                service.signup(User);
-            }
-
-        }
-
-
-
-        @GetMapping("/refresh")
-        //@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-        public String refresh(HttpServletRequest req) {
-            return service.refresh(req.getRemoteUser());
-        }
-
-        @GetMapping("/logout")
-        public void logout(@RequestHeader(value = "Authorization") String authorize) {
-            String token = authorize.substring(7);
-            service.logout(token);
-
-        }
 
        
 

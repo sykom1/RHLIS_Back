@@ -3,6 +3,7 @@ package com.amu.project_back.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "lis_pole")
@@ -16,11 +17,14 @@ public class Pole {
 
 
     @Column(name="poles_label")
-    private String label;
+    private String name;
 
-    /*
-    @OneToOne
-    @JoinColumn(name="equipes_id")
-    private transient Team team;
-    */
+
+    @ManyToMany()
+    @JoinTable(
+            name = "lis_poles_equipes",
+            joinColumns = @JoinColumn(name = "poles_id"),
+            inverseJoinColumns = @JoinColumn(name = "teams_id")
+    )
+    private List<Team> teams;
 }

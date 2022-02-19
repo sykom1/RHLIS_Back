@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "annuaire")
 @Data
-public class Annuary {
+public class Directory {
 
     @Id
     @GeneratedValue
@@ -145,6 +145,9 @@ public class Annuary {
 
 
 
+    public void setDirectory(Directory directory){
+
+    }
 
 
 }

@@ -4,6 +4,8 @@ import com.amu.project_back.models.enume.*;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
@@ -24,15 +26,19 @@ public class Directory {
     private transient Country country;
 
     @Column(name= "ann_nom")
+    @NotBlank(message = "Le nom est obligatoire !")
     private String lastname;
 
     @Column(name= "ann_prenom")
+    @NotBlank(message = "Le prenom est obligatoire !")
     private String firstname;
 
     @Column(name= "ann_naissance")
     private Date birthday;
 
     @Column(name= "ann_tel_perso")
+    @Pattern(regexp="(^$|[0-9]{10})",message = "le numéro de téléphone doit contenir 10 chiffres")
+    @NotBlank(message = "Le numero de telephone est obligatoire !")
     private String phoneNumber;
 
     @Column(name= "ann_courriel")

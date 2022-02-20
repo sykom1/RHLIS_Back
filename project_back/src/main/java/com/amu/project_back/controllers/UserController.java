@@ -53,6 +53,7 @@ public class UserController {
     public User getUser(@PathVariable Integer id) {
         return repo.getById(Long.valueOf(id));
     }
+
     @GetMapping(value = "/referent/users/{id}")
     public User getUserOfReferent(@PathVariable Integer id) {
         return repo.getById(Long.valueOf(id));
@@ -95,9 +96,9 @@ public class UserController {
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        User user = repo.findByUsername(userDetails.getUsername());
+        User user = repo.findByEmail(userDetails.getUsername());
 
-        TokenEntity tokenEntity = tokenEntityRepository.findByUserUsername(user.getUsername());
+        TokenEntity tokenEntity = tokenEntityRepository.findByUserUsername(user.getEmail());
 
         // Premiere Connexion
         if (tokenEntity == null) {

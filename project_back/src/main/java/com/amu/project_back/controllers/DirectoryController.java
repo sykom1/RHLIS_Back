@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+
+@RestController
+@RequestMapping("/api")
 public class DirectoryController {
 
 
@@ -20,10 +23,6 @@ public class DirectoryController {
 
     @GetMapping(value = "/directories/{id}")
     public Directory getDirectory(@PathVariable Integer id) {
-        return repo.getById(Long.valueOf(id));
-    }
-    @GetMapping(value = "/referent/directories/{id}")
-    public Directory getDirectoryOfReferent(@PathVariable Integer id) {
         return repo.getById(Long.valueOf(id));
     }
 

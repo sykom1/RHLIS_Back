@@ -81,7 +81,7 @@ public class Directory {
     private Date emeriteDate;
 
     @Column(name= "ann_adr_pro")
-    private String ProAddress;
+    private String proAddress;
 
     @Column(name= "ann_adr_perso")
     private String persoAddress;
@@ -109,7 +109,7 @@ public class Directory {
     private String referent;
 
     @Column(name= "referent_courriel")
-    private String RefEmail;
+    private String refEmail;
 
     @Column(name= "type")
     private AnnType type;
@@ -151,9 +151,49 @@ public class Directory {
 
 
 
-    public void setDirectory(Directory directory){
 
+    public void setDirectory(Directory directory) {
+        this.id = directory.id;
+        this.ildapId = directory.ildapId;
+        this.country = directory.country;
+        this.lastname = directory.lastname;
+        this.firstname = directory.firstname;
+        this.birthday = directory.birthday;
+        this.phoneNumber = directory.phoneNumber;
+        this.email = directory.email;
+        this.email2 = directory.email2;
+        this.privateEmail = directory.privateEmail;
+        this.guardianship = directory.guardianship;
+        this.component = directory.component;
+        this.site = directory.site;
+        this.lisState = directory.lisState;
+        this.state = directory.state;
+        this.amountWork = directory.amountWork;
+        this.hdr = directory.hdr;
+        this.hdrDate = directory.hdrDate;
+        this.emerite = directory.emerite;
+        this.emeriteDate = directory.emeriteDate;
+        this.proAddress = directory.proAddress;
+        this.persoAddress = directory.persoAddress;
+        this.cnu = directory.cnu;
+        this.cnrs = directory.cnrs;
+        this.building = directory.building;
+        this.civ = directory.civ;
+        this.sectionCnu = directory.sectionCnu;
+        this.sectionCnrs = directory.sectionCnrs;
+        this.referent = directory.referent;
+        this.refEmail = directory.refEmail;
+        this.type = directory.type;
+        this.remarks = directory.remarks;
+        this.titulaire = directory.titulaire;
+        this.url = directory.url;
+        this.hal = directory.hal;
+        this.photo = directory.photo;
+        this.diff = directory.diff;
+        this.reseda = directory.reseda;
+        this.orcid = directory.orcid;
+        this.lk = directory.lk;
+        this.role = directory.role;
+        this.diploma = directory.diploma;
     }
-
-
 }

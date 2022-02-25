@@ -44,7 +44,7 @@ public class UserController {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-    @GetMapping()
+    @GetMapping(value = "/users")
     public Iterable<User> getUser() {
         return repo.findAll();
     }

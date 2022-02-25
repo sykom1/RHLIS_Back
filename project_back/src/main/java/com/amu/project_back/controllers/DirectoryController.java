@@ -16,7 +16,7 @@ public class DirectoryController {
     DirectoryRepository repo;
 
 
-    @GetMapping()
+    @GetMapping(value = "/directories")
     public Iterable<Directory> getDirectory() {
         return repo.findAll();
     }

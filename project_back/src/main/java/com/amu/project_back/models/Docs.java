@@ -18,7 +18,7 @@ public class Docs {
 
     @OneToOne
     @JoinColumn(name = "ann_doc_ann_id")
-    private transient Annuary annuary;
+    private transient Directory directory;
 
     @Column(name = "ann_doc_titre")
     private String title;

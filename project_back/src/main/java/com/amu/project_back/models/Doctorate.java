@@ -18,7 +18,7 @@ public class Doctorate {
     //ou ID
     @OneToOne
     @JoinColumn(name = "ann_comp_doc_ann_id")
-    private transient Annuary annuary;
+    private transient Directory directory;
 
     @Column(name = "ann_comp_doc_titre_these    ")
     private String thesisTitle;

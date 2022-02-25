@@ -20,7 +20,7 @@ public class PresenceBuilding {
 
     @OneToOne
     @JoinColumn(name = "lis_pres_bat_ann_id")
-    private transient Annuary annuary;
+    private transient Directory directory;
 
     @JoinColumn(name = "lis_pres_bat_bat_id")
     @OneToOne

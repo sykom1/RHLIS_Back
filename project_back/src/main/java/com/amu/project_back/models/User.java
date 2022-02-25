@@ -2,6 +2,7 @@ package com.amu.project_back.models;
 
 import lombok.Data;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "utilisateurs")
@@ -14,8 +15,10 @@ public class User {
     private long id;
 
     @Column(name = "uti_login")
-    private String username;
+    @NotBlank(message = "L'email est obligatoire !")
+    private String email;
 
+    @NotBlank(message = "Le mot de passe est obligatoire !")
     @Column(name= "uti_pass")
     private String password;
 
@@ -28,7 +31,7 @@ public class User {
 
     public void setUser(User user){
         this.id = user.id;
-        this.username = user.username;
+        this.email = user.email;
         this.password = user.password;
         this.banned = user.banned;
         this.role = user.role;

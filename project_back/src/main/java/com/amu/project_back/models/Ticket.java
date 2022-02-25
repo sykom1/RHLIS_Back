@@ -18,7 +18,7 @@ public class Ticket {
 
     @OneToOne
     @JoinColumn(name = "ticket_ann_id")
-    private transient Annuary annuary;
+    private transient Directory directory;
 
     @Column(name = "ticket_nom_prenom")
     private String name;

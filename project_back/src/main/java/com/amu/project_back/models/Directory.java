@@ -4,12 +4,14 @@ import com.amu.project_back.models.enume.*;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
 @Table(name = "annuaire")
 @Data
-public class Annuary {
+public class Directory {
 
     @Id
     @GeneratedValue
@@ -24,15 +26,19 @@ public class Annuary {
     private transient Country country;
 
     @Column(name= "ann_nom")
+    @NotBlank(message = "Le nom est obligatoire !")
     private String lastname;
 
     @Column(name= "ann_prenom")
+    @NotBlank(message = "Le prenom est obligatoire !")
     private String firstname;
 
     @Column(name= "ann_naissance")
     private Date birthday;
 
     @Column(name= "ann_tel_perso")
+    @Pattern(regexp="(^$|[0-9]{10})",message = "le numéro de téléphone doit contenir 10 chiffres")
+    @NotBlank(message = "Le numero de telephone est obligatoire !")
     private String phoneNumber;
 
     @Column(name= "ann_courriel")
@@ -75,7 +81,7 @@ public class Annuary {
     private Date emeriteDate;
 
     @Column(name= "ann_adr_pro")
-    private String ProAddress;
+    private String proAddress;
 
     @Column(name= "ann_adr_perso")
     private String persoAddress;
@@ -103,7 +109,7 @@ public class Annuary {
     private String referent;
 
     @Column(name= "referent_courriel")
-    private String RefEmail;
+    private String refEmail;
 
     @Column(name= "type")
     private AnnType type;
@@ -146,5 +152,48 @@ public class Annuary {
 
 
 
-
+    public void setDirectory(Directory directory) {
+        this.id = directory.id;
+        this.ildapId = directory.ildapId;
+        this.country = directory.country;
+        this.lastname = directory.lastname;
+        this.firstname = directory.firstname;
+        this.birthday = directory.birthday;
+        this.phoneNumber = directory.phoneNumber;
+        this.email = directory.email;
+        this.email2 = directory.email2;
+        this.privateEmail = directory.privateEmail;
+        this.guardianship = directory.guardianship;
+        this.component = directory.component;
+        this.site = directory.site;
+        this.lisState = directory.lisState;
+        this.state = directory.state;
+        this.amountWork = directory.amountWork;
+        this.hdr = directory.hdr;
+        this.hdrDate = directory.hdrDate;
+        this.emerite = directory.emerite;
+        this.emeriteDate = directory.emeriteDate;
+        this.proAddress = directory.proAddress;
+        this.persoAddress = directory.persoAddress;
+        this.cnu = directory.cnu;
+        this.cnrs = directory.cnrs;
+        this.building = directory.building;
+        this.civ = directory.civ;
+        this.sectionCnu = directory.sectionCnu;
+        this.sectionCnrs = directory.sectionCnrs;
+        this.referent = directory.referent;
+        this.refEmail = directory.refEmail;
+        this.type = directory.type;
+        this.remarks = directory.remarks;
+        this.titulaire = directory.titulaire;
+        this.url = directory.url;
+        this.hal = directory.hal;
+        this.photo = directory.photo;
+        this.diff = directory.diff;
+        this.reseda = directory.reseda;
+        this.orcid = directory.orcid;
+        this.lk = directory.lk;
+        this.role = directory.role;
+        this.diploma = directory.diploma;
+    }
 }

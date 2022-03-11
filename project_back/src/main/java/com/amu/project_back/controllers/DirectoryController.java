@@ -2,6 +2,7 @@ package com.amu.project_back.controllers;
 
 import com.amu.project_back.models.Directory;
 import com.amu.project_back.repository.DirectoryRepository;
+import com.amu.project_back.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,11 @@ public class DirectoryController {
         return repo.findAll();
     }
 
-    @GetMapping(value = "/directories/{id}")
-    public Directory getDirectory(@PathVariable Integer id) {
+
+    //@GetMapping(value = "/directories/{id}")
+    /*public Directory getDirectory(@PathVariable Integer id) {
         return repo.getById(Long.valueOf(id));
-    }
+    } */
 
 
     @PutMapping(value = "/directories/{id}")
@@ -34,8 +36,11 @@ public class DirectoryController {
         return repo.save(oldDirectory);
     }
 
+
+
     @PostMapping(value = "/directories")
     public Directory saveDirectory(@RequestBody Directory Directory) {
+
         return repo.save(Directory);
     }
 

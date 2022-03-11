@@ -20,7 +20,7 @@ public class Doctorate {
     @JoinColumn(name = "ann_comp_doc_ann_id")
     private transient Directory directory;
 
-    @Column(name = "ann_comp_doc_titre_these    ")
+    @Column(name = "ann_comp_doc_titre_these")
     private String thesisTitle;
 
     @Column(name = "ann_comp_doc_sujet")

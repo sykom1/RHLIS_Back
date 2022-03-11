@@ -74,10 +74,10 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/{id}")
+   /* @GetMapping("/users/{id}")
     public User getUserById(@PathVariable Long id) {
         return repo.findById(id).get();
-    }
+    } */
 
 
 
@@ -98,7 +98,7 @@ public class UserController {
 
         User user = repo.findByEmail(userDetails.getUsername());
 
-        TokenEntity tokenEntity = tokenEntityRepository.findByUserUsername(user.getEmail());
+        TokenEntity tokenEntity = tokenEntityRepository.findByUserEmail(user.getEmail());
 
         // Premiere Connexion
         if (tokenEntity == null) {

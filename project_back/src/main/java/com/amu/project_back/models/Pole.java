@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "lis_pole")
+@Table(name = "lis_poles")
 @Data
 public class Pole {
 
     @Id
     @GeneratedValue
-    @Column(name = "pole_id")
+    @Column(name = "poles_id")
     private long id;
 
 
@@ -24,7 +24,7 @@ public class Pole {
     @JoinTable(
             name = "lis_poles_equipes",
             joinColumns = @JoinColumn(name = "poles_id"),
-            inverseJoinColumns = @JoinColumn(name = "teams_id")
+            inverseJoinColumns = @JoinColumn(name = "equipes_id")
     )
     private List<Team> teams;
 }

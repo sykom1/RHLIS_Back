@@ -93,8 +93,9 @@ public class Directory {
     private int cnrs;
 
     // ou ID
-    @Column(name= "ann_lis_bat_id")
-    private transient Building building;
+    @JoinColumn(name = "ann_lis_bat_id")
+    @ManyToOne
+    private Building building;
 
     @Column(name= "ann_civ")
     private Civ civ;
@@ -106,7 +107,8 @@ public class Directory {
     private Cnrs sectionCnrs;
 
     @Column(name= "referent")
-    private String referent;
+    private int referent_id;
+
 
     @Column(name= "referent_courriel")
     private String refEmail;
@@ -114,7 +116,7 @@ public class Directory {
     @Column(name= "type")
     private AnnType type;
 
-    @Column(name= "remarque")
+    @Column(name= "remarques")
     private String remarks;
 
     @Column(name= "titulaire")
@@ -141,12 +143,20 @@ public class Directory {
     @Column(name= "ann_comp_gen_lk")
     private String lk;
 
+    @ManyToOne
+    private Team team;
+
     @Column(name= "droits")
     private UserRole role;
 
+
+    @OneToOne
+    private User user;
+
     // ou ID
-    @Column(name= "annuaire_diplome_ann_diplome_id")
-    private transient Diploma diploma;
+    @OneToOne
+    @JoinColumn(name= "annuaire_diplome_ann_diplome_id")
+    private Diploma diploma;
 
 
 
@@ -181,7 +191,7 @@ public class Directory {
         this.civ = directory.civ;
         this.sectionCnu = directory.sectionCnu;
         this.sectionCnrs = directory.sectionCnrs;
-        this.referent = directory.referent;
+        this.referent_id = directory.referent_id;
         this.refEmail = directory.refEmail;
         this.type = directory.type;
         this.remarks = directory.remarks;

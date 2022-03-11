@@ -19,7 +19,7 @@ public class Diploma {
 
     @ManyToOne
     @JoinColumn(name = "ann_diplome_ann_id")
-    private transient Directory directory;
+    private Directory directory;
 
     @Column(name = "ann_diplome_commentaire")
     private String comment;

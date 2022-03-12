@@ -1,9 +1,11 @@
 package com.amu.project_back.controllers;
 
+import com.amu.project_back.dto.UtilisateursDTO;
 import com.amu.project_back.models.*;
 import com.amu.project_back.repository.TokenEntityRepository;
 import com.amu.project_back.repository.UserRepository;
 import com.amu.project_back.util.JwtUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,14 +58,18 @@ public class UserController {
 
 
     @PutMapping(value = "/users/{id}")
-    public Utilisateur modifyUser(@PathVariable Integer id, @RequestBody Utilisateur newUser) {
+    public Utilisateur modifyUser(@PathVariable Integer id,@RequestBody UtilisateursDTO userDTO) {
+        ModelMapper mapper = new ModelMapper();
+        Utilisateur newUser = mapper.map(userDTO, Utilisateur.class);
         Utilisateur oldUser = repo.findById(Long.valueOf(id)).get();
         oldUser.setUser(newUser);
         return repo.save(oldUser);
     }
 
     @PostMapping(value = "/users")
-    public Utilisateur saveUser(@RequestBody Utilisateur user) {
+    public Utilisateur saveUser(@RequestBody UtilisateursDTO userDTO) {
+        ModelMapper mapper = new ModelMapper();
+        Utilisateur user = mapper.map(userDTO, Utilisateur.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repo.save(user);
     }

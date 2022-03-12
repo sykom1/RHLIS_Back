@@ -1,51 +1,65 @@
 package com.amu.project_back.models;
-
 import com.amu.project_back.models.enume.TicketDomain;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.math.BigInteger;
 
+
+/**
+ * The persistent class for the ticket database table.
+ * 
+ */
 @Entity
-@Table(name = "ticket")
 @Data
-public class Ticket {
+@NoArgsConstructor
+@NamedQuery(name="Ticket.findAll", query="SELECT t FROM Ticket t")
+public class Ticket implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "ticket_id")
-    private long id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="ticket_id")
+	private String ticketId;
 
-    @OneToOne
-    @JoinColumn(name = "ticket_ann_id")
-    private transient Directory directory;
+	@Column(name="ticket_courriel")
+	private String ticketCourriel;
 
-    @Column(name = "ticket_nom_prenom")
-    private String name;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="ticket_date")
+	private Date ticketDate;
 
-    @Column(name = "ticket_courriel")
-    private String email;
+	@Lob
+	@Column(name="ticket_description")
+	private String ticketDescription;
 
-    @OneToOne
-    @JoinColumn(name = "ticket_pole_id")
-    private transient Pole pole;
+	@Column(name="ticket_description_courte")
+	private String ticketDescriptionCourte;
 
-    @OneToOne
-    @JoinColumn(name = "ticket_equipe_id")
-    private transient Team team;
+	@Column(name="ticket_domaine")
+	private TicketDomain ticketDomaine;
 
-    @Column(name = "ticket_domaine")
-    private TicketDomain domain;
+	@Column(name="ticket_fichier")
+	private String ticketFichier;
 
-    @Column(name = "ticket_description_courte")
-    private String shortDesc;
+	@Column(name="ticket_nom_prenom")
+	private String ticketNomPrenom;
 
-    @Column(name = "ticket_description")
-    private String description;
+	@Column(name="ticket_pole_id")
+	private BigInteger ticketPoleId;
 
-    @Column(name = "ticket_fichier")
-    private String file;
+	//bi-directional many-to-one association to Annuaire
+	@ManyToOne
+	@JoinColumn(name="ticket_ann_id")
+	private Annuaire annuaire;
 
-    @Column(name = "ticket_date")
-    private Date date;
+	//bi-directional many-to-one association to AnnuaireEquipe
+	@ManyToOne
+	@JoinColumn(name="ticket_equipe_id")
+	private AnnuaireEquipe annuaireEquipe;
+
+
 }

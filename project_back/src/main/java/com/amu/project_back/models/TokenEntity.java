@@ -18,13 +18,13 @@ public class TokenEntity {
 	private String jwt;
 	
 	@OneToOne
-	private User user;
+	private Utilisateur user;
 
 	public TokenEntity() {
 		
 	}
 	
-	public TokenEntity(String jwt, User user) {
+	public TokenEntity(String jwt, Utilisateur user) {
 		this.jwt = jwt;
 		this.user = user;
 	}
@@ -45,11 +45,11 @@ public class TokenEntity {
 		this.jwt = jwt;
 	}
 
-	public User getUser() {
+	public Utilisateur getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Utilisateur user) {
 		this.user = user;
 	}
 	

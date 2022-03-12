@@ -4,9 +4,9 @@ public class AuthenticationResponse {
 
 	private final String jwt;
 	
-	private final User user;
+	private final Utilisateur user;
 
-	public AuthenticationResponse(String jwt, User user) {
+	public AuthenticationResponse(String jwt, Utilisateur user) {
 		this.jwt = jwt;
 		this.user = user;
 	}
@@ -15,7 +15,7 @@ public class AuthenticationResponse {
 		return jwt;
 	}
 	
-	public User getUser() {
+	public Utilisateur getUser() {
 		return user;
 	}
 }

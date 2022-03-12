@@ -20,6 +20,7 @@ public class LisEquipeController {
     public Iterable<LisEquipe> getPoles(){
         return repo.findAll();
     }
+
     @GetMapping("/equipes/{id}")
     public LisEquipe getPole(@PathVariable Integer id) {
         return repo.getById(Long.valueOf(id));

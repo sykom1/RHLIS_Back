@@ -1,7 +1,9 @@
 package com.amu.project_back.controllers;
 
+import com.amu.project_back.dto.AnnuaireDTO;
 import com.amu.project_back.models.Annuaire;
 import com.amu.project_back.repository.DirectoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,9 @@ public class DirectoryController {
 
 
     @PutMapping(value = "/directories/{id}")
-    public Annuaire modifyAnnuaire(@PathVariable Integer id, @RequestBody Annuaire newAnnuaire) {
+    public Annuaire modifyAnnuaire(@PathVariable Integer id, @RequestBody AnnuaireDTO annuaireDTO) {
+        ModelMapper mapper = new ModelMapper();
+        Annuaire newAnnuaire = mapper.map(annuaireDTO, Annuaire.class);
         Annuaire oldAnnuaire = repo.findById(Long.valueOf(id)).get();
         oldAnnuaire.setAnnuaire(newAnnuaire);
         return repo.save(oldAnnuaire);
@@ -38,9 +42,10 @@ public class DirectoryController {
 
 
     @PostMapping(value = "/directories")
-    public Annuaire saveAnnuaire(@RequestBody Annuaire Annuaire) {
-
-        return repo.save(Annuaire);
+    public Annuaire saveAnnuaire(@RequestBody AnnuaireDTO annuaireDTO) {
+        ModelMapper mapper = new ModelMapper();
+        Annuaire annuaire = mapper.map(annuaireDTO, Annuaire.class);
+        return repo.save(annuaire);
     }
 
 

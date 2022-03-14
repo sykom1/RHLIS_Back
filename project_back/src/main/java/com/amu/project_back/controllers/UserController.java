@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -39,6 +42,20 @@ public class UserController {
     JwtUtil jwtTokenUtil;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
+    @PostConstruct
+    public void init() {
+
+        Utilisateur user = new Utilisateur("john@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "0600000000");
+        Utilisateur ref = new Utilisateur("ref@gmail.com", passwordEncoder.encode("ref"), UserRole.REFERENT, "ref", "boo", new Date(), "0600000000");
+        Utilisateur service = new Utilisateur("service@gmail.com", passwordEncoder.encode("service"), UserRole.SERVICE_ADMINISTRATIF_FINANCIER, "service", "financier", new Date(), "0600000000");
+        Utilisateur admin = new Utilisateur("admin@gmail.com", passwordEncoder.encode("admin"), UserRole.ADMIN, "admin", "admin", new Date(), "0600000000");
+        repo.save(user);
+        repo.save(ref);
+        repo.save(service);
+        repo.save(admin);
+    }
 
 
     @GetMapping(value = "/users")

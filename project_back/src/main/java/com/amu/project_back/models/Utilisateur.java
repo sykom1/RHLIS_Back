@@ -60,6 +60,22 @@ public class Utilisateur implements Serializable {
 	private Annuaire directory;
 
 
+	public Utilisateur(@NotBlank(message = "L'email est obligatoire !") String email,
+					   @NotBlank(message = "Le mot de passe est obligatoire !") String password, UserRole role,
+					   @NotBlank(message = "Le nom est obligatoire !") String lastname,
+					   @NotBlank(message = "Le prenom est obligatoire !") String firstname, Date birthday,
+					   @Pattern(regexp = "(^$|[0-9]{10})", message = "le numéro de téléphone doit contenir 10 chiffres") @NotBlank(message = "Le numero de telephone est obligatoire !") String phoneNumber) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.role = role;
+		this.lastname = lastname;
+		this.firstname = firstname;
+		this.birthday = birthday;
+		this.phoneNumber = phoneNumber;
+	}
+
+
 	public void setUser(Utilisateur user){
 		this.id = user.id;
 		this.email = user.email;

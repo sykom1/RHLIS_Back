@@ -1,6 +1,7 @@
 package com.amu.project_back.web;
 
-import com.amu.project_back.models.UserRole;
+
+import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.security.JwtRequestFilter;
 import com.amu.project_back.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;

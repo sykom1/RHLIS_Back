@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -14,6 +15,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @Table(name="lis_pays")
 @NamedQuery(name="LisPay.findAll", query="SELECT l FROM LisPay l")

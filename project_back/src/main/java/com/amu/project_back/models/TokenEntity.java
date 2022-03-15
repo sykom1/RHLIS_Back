@@ -1,8 +1,10 @@
 package com.amu.project_back.models;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Entity
+@Valid
 public class TokenEntity {
 
 	@Id

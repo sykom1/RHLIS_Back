@@ -4,11 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @Table(name = "lis_poles")
 @NamedQuery(name="LisPole.findAll", query="SELECT l FROM LisPole l")

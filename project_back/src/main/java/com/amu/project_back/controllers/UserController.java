@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.websocket.server.PathParam;
 import java.util.Date;
 
 @RestController
@@ -43,7 +44,7 @@ public class UserController {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-
+/*
    @PostConstruct
     public void init() {
 
@@ -55,7 +56,7 @@ public class UserController {
         repo.save(ref);
         repo.save(service);
         repo.save(admin);
-    }
+    } */
 
 
     @GetMapping(value = "/users")
@@ -138,6 +139,17 @@ public class UserController {
         }
         return ResponseEntity.ok("Déconnexion réussite");
     }
+
+
+    @GetMapping("/search/role")
+    public Iterable<Utilisateur> getUsersBy(@PathParam("role") String role,@PathParam("datea") java.sql.Date datea,
+                                            @PathParam("dateb") java.sql.Date dateb,@PathParam("team") String team) {
+
+
+        return null;
+    }
+
+
 
 
 

@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.sql.Time;
 import java.util.Date;
 import java.math.BigInteger;
@@ -15,6 +16,7 @@ import java.math.BigInteger;
  */
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @Table(name="lis_batiment_presence")
 @NamedQuery(name="LisBatimentPresence.findAll", query="SELECT l FROM LisBatimentPresence l")

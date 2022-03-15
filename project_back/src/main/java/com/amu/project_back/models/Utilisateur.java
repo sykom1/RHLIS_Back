@@ -1,8 +1,9 @@
 package com.amu.project_back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
+
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.math.BigInteger;
+
 import java.util.Date;
 
 

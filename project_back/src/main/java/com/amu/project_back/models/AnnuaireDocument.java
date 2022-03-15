@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Date;
 import java.math.BigInteger;
 
@@ -15,6 +16,7 @@ import java.math.BigInteger;
  */
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @Table(name="annuaire_documents")
 @NamedQuery(name="AnnuaireDocument.findAll", query="SELECT a FROM AnnuaireDocument a")

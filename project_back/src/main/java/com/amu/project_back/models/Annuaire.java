@@ -162,6 +162,7 @@ public class Annuaire implements Serializable {
 	@OneToMany(mappedBy="annuaire")
 	private List<AnnuaireDocument> annuaireDocuments;
 
+
 	//bi-directional many-to-one association to AnnuaireEquipe
 	@OneToMany(mappedBy="annuaire")
 	private List<AnnuaireEquipe> annuaireEquipes;
@@ -173,6 +174,9 @@ public class Annuaire implements Serializable {
 	//bi-directional many-to-one association to Ticket
 	@OneToMany(mappedBy="annuaire")
 	private List<Ticket> tickets;
+
+	@OneToOne
+	private Utilisateur user;
 
 
 	public void setAnnuaire(Annuaire annuaire) {

@@ -3,6 +3,7 @@ package com.amu.project_back.controllers;
 import com.amu.project_back.dto.AnnuaireDTO;
 import com.amu.project_back.models.Annuaire;
 import com.amu.project_back.repository.DirectoryRepository;
+import com.amu.project_back.repository.LisEquipeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ public class DirectoryController {
 
     @Autowired
     DirectoryRepository repo;
+
+
 
 
     @GetMapping(value = "/directories")
@@ -61,4 +64,6 @@ public class DirectoryController {
     void deleteAnnuaire(@PathVariable Long id) {
         repo.deleteById(id);
     }
+
+
 }

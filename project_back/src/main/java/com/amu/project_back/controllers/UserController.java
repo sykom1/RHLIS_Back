@@ -2,9 +2,10 @@ package com.amu.project_back.controllers;
 
 import com.amu.project_back.dto.UtilisateursDTO;
 import com.amu.project_back.models.*;
-import com.amu.project_back.repository.TokenEntityRepository;
-import com.amu.project_back.repository.UserRepository;
+import com.amu.project_back.models.enume.UserRole;
+import com.amu.project_back.repository.*;
 import com.amu.project_back.util.JwtUtil;
+import org.aspectj.weaver.AnnotationNameValuePair;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.websocket.server.PathParam;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api")
@@ -35,12 +41,20 @@ public class UserController {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Autowired
+    LisEquipeRepository eqrepo;
 
     @Autowired
     TokenEntityRepository tokenEntityRepository;
 
     @Autowired
     JwtUtil jwtTokenUtil;
+
+    @Autowired
+    LisPoleRepository polerepo;
+
+    @Autowired
+    AnnuaireEquipeRepository annrepo;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -141,13 +155,67 @@ public class UserController {
     }
 
 
-    @GetMapping("/search/role")
-    public Iterable<Utilisateur> getUsersBy(@PathParam("role") String role,@PathParam("datea") java.sql.Date datea,
-                                            @PathParam("dateb") java.sql.Date dateb,@PathParam("team") String team) {
+    @GetMapping("/search")
+    public Iterable<Utilisateur> getUsersBy(@PathParam("type") String type, @PathParam("name") String name ) {
 
+        switch (type){
+            case "role" : {
+               return repo.findAllByRoleLike(UserRole.valueOf(name));
+            }
+            case "datea" : {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
+                LocalDate localdate = LocalDate.parse(name, formatter);
+                java.sql.Date date =  java.sql.Date.valueOf(localdate);
+                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateArrive(date);
+                List<Utilisateur> users = new ArrayList<>();
+                for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
+                    users.add(annuaireEquipe.getAnnuaire().getUser());
+                }
+                return users;
+            }
+            case "dated" : {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
+                LocalDate localdate = LocalDate.parse(name, formatter);
+                java.sql.Date date =  java.sql.Date.valueOf(localdate);
+                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateSortie(date);
+                List<Utilisateur> users = new ArrayList<>();
+                for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
+                    users.add(annuaireEquipe.getAnnuaire().getUser());
+                }
+                return users;
+            }
+            case "team" : {
+                List<LisEquipe> teams = eqrepo.findAllByEquipesLabel(name);
+                List<Utilisateur> users = new ArrayList<>();
+                for (LisEquipe team : teams){
+                    Utilisateur temp = team.getAnnuaireEquipe().getAnnuaire().getUser();
+                    if(!users.contains(temp)){
+                        users.add(temp);
+                    }
 
-        return null;
+                }
+                return users;
+            }
+            case "pole" : {
+                List<LisPole> poles = polerepo.findAllByName(name);
+                List<Utilisateur> users = new ArrayList<>();
+                for(LisPole pole : poles){
+                    for(LisEquipe eq : pole.getLisEquipes()){
+                        Utilisateur temp =eq.getAnnuaireEquipe().getAnnuaire().getUser();
+                        if(!users.contains(temp)){
+                            users.add(temp);
+                        }
+                    }
+                }
+                return users;
+            }
+            default:
+                return null;
+        }
+
     }
+
+
 
 
 

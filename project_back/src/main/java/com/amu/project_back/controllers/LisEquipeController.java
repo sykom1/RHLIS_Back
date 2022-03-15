@@ -17,13 +17,14 @@ public class LisEquipeController {
 
 
     @GetMapping("/equipes")
-    public Iterable<LisEquipe> getPoles(){
+    public Iterable<LisEquipe> getTeams(){
         return repo.findAll();
     }
 
     @GetMapping("/equipes/{id}")
-    public LisEquipe getPole(@PathVariable Integer id) {
+    public LisEquipe getTeam(@PathVariable Integer id) {
         return repo.getById(Long.valueOf(id));
     }
+
 
 }

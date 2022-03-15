@@ -1,4 +1,4 @@
-package com.amu.project_back.models;
+package com.amu.project_back.models.enume;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,5 +1,6 @@
 package com.amu.project_back.models;
 
+import com.amu.project_back.models.enume.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,9 +46,7 @@ public class Utilisateur implements Serializable {
 	@JsonIgnore
 	private String password;
 
-	@Column(name = "uti_banni")
-	private boolean banned;
-
+	
 	private UserRole role;
 
 	@NotBlank(message = "Le nom est obligatoire !")
@@ -87,7 +86,6 @@ public class Utilisateur implements Serializable {
 		this.id = user.id;
 		this.email = user.email;
 		this.password = user.password;
-		this.banned = user.banned;
 		this.role = user.role;
 	}
 

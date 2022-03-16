@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @Table(name="lis_batiments")
 @NamedQuery(name="LisBatiment.findAll", query="SELECT l FROM LisBatiment l")

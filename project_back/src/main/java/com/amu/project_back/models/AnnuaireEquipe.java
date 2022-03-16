@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @Table(name="annuaire_equipes")
 @NamedQuery(name="AnnuaireEquipe.findAll", query="SELECT a FROM AnnuaireEquipe a")

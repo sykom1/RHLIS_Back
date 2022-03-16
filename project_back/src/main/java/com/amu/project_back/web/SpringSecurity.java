@@ -1,6 +1,7 @@
 package com.amu.project_back.web;
 
-import com.amu.project_back.models.UserRole;
+
+import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.security.JwtRequestFilter;
 import com.amu.project_back.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,10 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 			.authorizeRequests().antMatchers("/api/login").permitAll()
-			.antMatchers("/api/users").hasAnyRole(UserRole.ADMIN.getAuthority(),
+			.antMatchers("/api/users").hasAnyAuthority(UserRole.ADMIN.getAuthority(),
 						UserRole.REFERENT.getAuthority())
-				.antMatchers("/api/directories").hasAnyRole(UserRole.ADMIN.getAuthority(),UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
-			.antMatchers("/api/users/{id}").hasAnyRole(UserRole.ADMIN.getAuthority(),
+				.antMatchers("/api/directories").hasAnyAuthority(UserRole.ADMIN.getAuthority(),UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
+			.antMatchers("/api/users/{id}").hasAnyAuthority(UserRole.ADMIN.getAuthority(),
 						UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
 			.antMatchers("/api/logout").authenticated()
 			.antMatchers("/api/**").authenticated()

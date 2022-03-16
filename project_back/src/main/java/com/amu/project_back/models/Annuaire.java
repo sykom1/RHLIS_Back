@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@Valid
 @NoArgsConstructor
 @NamedQuery(name="Annuaire.findAll", query="SELECT a FROM Annuaire a")
 public class Annuaire implements Serializable {
@@ -160,6 +162,7 @@ public class Annuaire implements Serializable {
 	@OneToMany(mappedBy="annuaire")
 	private List<AnnuaireDocument> annuaireDocuments;
 
+
 	//bi-directional many-to-one association to AnnuaireEquipe
 	@OneToMany(mappedBy="annuaire")
 	private List<AnnuaireEquipe> annuaireEquipes;
@@ -171,6 +174,9 @@ public class Annuaire implements Serializable {
 	//bi-directional many-to-one association to Ticket
 	@OneToMany(mappedBy="annuaire")
 	private List<Ticket> tickets;
+
+	@OneToOne
+	private Utilisateur user;
 
 
 	public void setAnnuaire(Annuaire annuaire) {

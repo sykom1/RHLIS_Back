@@ -158,9 +158,6 @@ public class Annuaire implements Serializable {
 	@JoinColumn(name="ann_lis_pays_id")
 	private LisPay lisPay;
 
-	//bi-directional many-to-one association to AnnuaireDocument
-	@OneToMany(mappedBy="annuaire")
-	private List<AnnuaireDocument> annuaireDocuments;
 
 
 	//bi-directional many-to-one association to AnnuaireEquipe
@@ -171,9 +168,7 @@ public class Annuaire implements Serializable {
 	@ManyToMany(mappedBy="annuaires")
 	private List<LisComite> lisComites;
 
-	//bi-directional many-to-one association to Ticket
-	@OneToMany(mappedBy="annuaire")
-	private List<Ticket> tickets;
+
 
 	@OneToOne
 	private Utilisateur user;
@@ -222,9 +217,7 @@ public class Annuaire implements Serializable {
 		this.annuaireDiplome = annuaire.annuaireDiplome;
 		this.lisBatiment = annuaire.lisBatiment;
 		this.lisPay = annuaire.lisPay;
-		this.annuaireDocuments = annuaire.annuaireDocuments;
 		this.annuaireEquipes = annuaire.annuaireEquipes;
 		this.lisComites = annuaire.lisComites;
-		this.tickets = annuaire.tickets;
 	}
 }

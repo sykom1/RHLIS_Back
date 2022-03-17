@@ -70,9 +70,7 @@ public class AnnuaireEquipe implements Serializable {
 	@JoinColumn(name="annuaire_equipes_id")
 	private LisEquipe lisEquipe;
 
-	//bi-directional many-to-one association to Ticket
-	@OneToMany(mappedBy="annuaireEquipe")
-	private List<Ticket> tickets;
+
 
 
 }

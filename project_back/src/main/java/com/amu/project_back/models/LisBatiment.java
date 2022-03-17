@@ -41,9 +41,7 @@ public class LisBatiment implements Serializable {
 	@OneToMany(mappedBy="lisBatiment")
 	private List<Annuaire> annuaires;
 
-	//bi-directional many-to-one association to LisBatimentPresence
-	@OneToMany(mappedBy="lisBatiment")
-	private List<LisBatimentPresence> lisBatimentPresences;
+
 
 
 

@@ -1,11 +1,13 @@
 package com.amu.project_back.controllers;
 
 import com.amu.project_back.dto.UtilisateursDTO;
+import com.amu.project_back.exception.ExceptionsHandler;
 import com.amu.project_back.models.*;
 import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.repository.*;
 import com.amu.project_back.util.JwtUtil;
-import org.aspectj.weaver.AnnotationNameValuePair;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.websocket.server.PathParam;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,8 +32,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/api")
-public class UserController {
-
+public class UserController extends ExceptionsHandler {
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -58,19 +60,19 @@ public class UserController {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-/*
-   @PostConstruct
-    public void init() {
 
-        Utilisateur user = new Utilisateur("john@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "0600000001");
-        Utilisateur ref = new Utilisateur("ref@gmail.com", passwordEncoder.encode("ref"), UserRole.REFERENT, "ref", "boo", new Date(), "0600000002");
+   @PostConstruct
+   public void init() {
+
+        Utilisateur user = new Utilisateur("johnaa@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "0a600001001");
+       /* Utilisateur ref = new Utilisateur("ref@gmail.com", passwordEncoder.encode("ref"), UserRole.REFERENT, "ref", "boo", new Date(), "0600000002");
         Utilisateur service = new Utilisateur("service@gmail.com", passwordEncoder.encode("service"), UserRole.SERVICE_ADMINISTRATIF_FINANCIER, "service", "financier", new Date(), "0600000000");
         Utilisateur admin = new Utilisateur("admin@gmail.com", passwordEncoder.encode("admin"), UserRole.ADMIN, "admin", "admin", new Date(), "0600000008");
-        repo.save(user);
+        */repo.save(user);/*
         repo.save(ref);
         repo.save(service);
-        repo.save(admin);
-    } */
+        repo.save(admin);*/
+    }
 
 
     @GetMapping(value = "/users")
@@ -160,7 +162,8 @@ public class UserController {
 
         switch (type){
             case "role" : {
-               return repo.findAllByRoleLike(UserRole.valueOf(name));
+
+               return repo.findAllByRoleLike(UserRole.valueOf(name.toUpperCase()));
             }
             case "datea" : {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
@@ -177,7 +180,7 @@ public class UserController {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
                 LocalDate localdate = LocalDate.parse(name, formatter);
                 java.sql.Date date =  java.sql.Date.valueOf(localdate);
-                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateSortie(date);
+                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateSortie(date );
                 List<Utilisateur> users = new ArrayList<>();
                 for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
                     users.add(annuaireEquipe.getAnnuaire().getUser());
@@ -214,13 +217,5 @@ public class UserController {
         }
 
     }
-
-
-
-
-
-
-
-       
 
 }

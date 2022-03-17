@@ -1,6 +1,7 @@
 package com.amu.project_back.controllers;
 
 import com.amu.project_back.dto.UtilisateursDTO;
+import com.amu.project_back.email.EmailServiceImpl;
 import com.amu.project_back.exception.ExceptionsHandler;
 import com.amu.project_back.models.*;
 import com.amu.project_back.models.enume.UserRole;
@@ -60,15 +61,18 @@ public class UserController extends ExceptionsHandler {
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
+    EmailServiceImpl emailService;
 
    @PostConstruct
    public void init() {
 
-        Utilisateur user = new Utilisateur("johnaa@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "0a600001001");
-       /* Utilisateur ref = new Utilisateur("ref@gmail.com", passwordEncoder.encode("ref"), UserRole.REFERENT, "ref", "boo", new Date(), "0600000002");
+        /*
+        Utilisateur user = new Utilisateur("john@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "06aa00051001");
+        repo.save(user);
+        Utilisateur ref = new Utilisateur("ref@gmail.com", passwordEncoder.encode("ref"), UserRole.REFERENT, "ref", "boo", new Date(), "0600000002");
         Utilisateur service = new Utilisateur("service@gmail.com", passwordEncoder.encode("service"), UserRole.SERVICE_ADMINISTRATIF_FINANCIER, "service", "financier", new Date(), "0600000000");
         Utilisateur admin = new Utilisateur("admin@gmail.com", passwordEncoder.encode("admin"), UserRole.ADMIN, "admin", "admin", new Date(), "0600000008");
-        */repo.save(user);/*
         repo.save(ref);
         repo.save(service);
         repo.save(admin);*/
@@ -215,6 +219,11 @@ public class UserController extends ExceptionsHandler {
             default:
                 return null;
         }
+
+    }
+
+    public void notifya(){
+        emailService.sendSimpleMessage("","notification","bonjour, vous avez une notification");
 
     }
 

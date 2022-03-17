@@ -1,4 +1,30 @@
 package com.amu.project_back.models.enume;
 
-public enum LisStatus {
+public  enum  LisStatus  {
+Professeur_des_Universités, Maître_de_Conférences,
+Directeur_de_Recherche,
+Chargé_de_Recherche,
+Ingénieur_de_Recherche,
+Ingénieur_d_Etudes,
+Technicien,
+Adjoint_Technique,
+Doctorant,
+PostDoctorant,
+Invité,
+Stagiaire,
+Assistant_Ingénieur,
+Chercheur_Associé,
+Directeur_deRecherche_Emerite,
+Attaché_Temporaire_à_la_Recherche_et_L_enseignement,
+Ingénieur_sous_contrat,
+ATER_Docteur,
+Professeur_Agrégé,
+Professeur_des_Université_Emerite,
+Professeur_Associé_à_Temps_partiel,
+Professeur_Certifié,
+Vacataire,
+Collaborateur_Occasionnel,
+Collaborateur_Bénévole,
+Ingénieur,
+ATER_Doctorant
 }

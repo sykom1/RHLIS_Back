@@ -90,15 +90,21 @@ public class Annuaire implements Serializable {
 	private String annLdapUid;
 
 	@Column(name="ann_lis_composantes")
+	@Enumerated(EnumType.STRING)
 	private Component annLisComposantes;
 
 	@Column(name="ann_lis_etat")
+	@Enumerated(EnumType.STRING)
 	private State annLisEtat;
 
 	@Column(name="ann_lis_sites")
+
+	@Enumerated(EnumType.STRING)
 	private Site annLisSites;
 
 	@Column(name="ann_lis_tutelles")
+
+	@Enumerated(EnumType.STRING)
 	private Guardianship annLisTutelles;
 
 	@Temporal(TemporalType.DATE)
@@ -123,7 +129,7 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_tel_perso")
 	private String annTelPerso;
 
-	private String droits;
+
 
 	private String referent;
 
@@ -134,14 +140,22 @@ public class Annuaire implements Serializable {
 	private String remarques;
 
 	@Column(name="section_cnrs")
+	@Enumerated(EnumType.STRING)
 	private Cnrs sectionCnrs;
 
 	@Column(name="section_cnu")
+	@Enumerated(EnumType.STRING)
 	private Cnrs sectionCnu;
 
 	private byte titulaire;
 
-	private AnnType type;
+	@Column(name = "type_contrat_doc")
+	@Enumerated(EnumType.STRING)
+	private DocType docType;
+
+	@Column(name = "type_financement_doc")
+	@Enumerated(EnumType.STRING)
+	private TypeFinance typeFinance;
 
 	//bi-directional many-to-one association to AnnuaireDiplome
 	@ManyToOne
@@ -206,14 +220,12 @@ public class Annuaire implements Serializable {
 		this.annSectionCnrs = annuaire.annSectionCnrs;
 		this.annSectionCnu = annuaire.annSectionCnu;
 		this.annTelPerso = annuaire.annTelPerso;
-		this.droits = annuaire.droits;
 		this.referent = annuaire.referent;
 		this.referentCourriel = annuaire.referentCourriel;
 		this.remarques = annuaire.remarques;
 		this.sectionCnrs = annuaire.sectionCnrs;
 		this.sectionCnu = annuaire.sectionCnu;
 		this.titulaire = annuaire.titulaire;
-		this.type = annuaire.type;
 		this.annuaireDiplome = annuaire.annuaireDiplome;
 		this.lisBatiment = annuaire.lisBatiment;
 		this.lisPay = annuaire.lisPay;

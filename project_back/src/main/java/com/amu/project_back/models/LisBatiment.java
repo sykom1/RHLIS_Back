@@ -1,5 +1,6 @@
 package com.amu.project_back.models;
 
+import com.amu.project_back.models.enume.Site;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -35,7 +36,8 @@ public class LisBatiment implements Serializable {
 	private String batLabel;
 
 	@Column(name="bat_site_id")
-	private BigInteger batSiteId;
+	@Enumerated(EnumType.STRING)
+	private Site batSite;
 
 	//bi-directional many-to-one association to Annuaire
 	@OneToMany(mappedBy="lisBatiment")

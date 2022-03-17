@@ -46,7 +46,7 @@ public class Utilisateur implements Serializable {
 	@JsonIgnore
 	private String password;
 
-	
+	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
 	@NotBlank(message = "Le nom est obligatoire !")

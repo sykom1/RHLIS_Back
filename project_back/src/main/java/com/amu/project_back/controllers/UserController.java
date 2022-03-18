@@ -44,8 +44,7 @@ public class UserController extends ExceptionsHandler {
     @Autowired
     UserDetailsService userDetailsService;
 
-    @Autowired
-    LisEquipeRepository eqrepo;
+
 
     @Autowired
     TokenEntityRepository tokenEntityRepository;
@@ -53,11 +52,7 @@ public class UserController extends ExceptionsHandler {
     @Autowired
     JwtUtil jwtTokenUtil;
 
-    @Autowired
-    LisPoleRepository polerepo;
 
-    @Autowired
-    AnnuaireEquipeRepository annrepo;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -162,66 +157,8 @@ public class UserController extends ExceptionsHandler {
     }
 
 
-    @GetMapping("/search")
-    public Iterable<Utilisateur> getUsersBy(@PathParam("type") String type, @PathParam("name") String name ) {
 
-        switch (type){
-            case "role" : {
 
-               return repo.findAllByRoleLike(UserRole.valueOf(name.toUpperCase()));
-            }
-            case "datea" : {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
-                LocalDate localdate = LocalDate.parse(name, formatter);
-                java.sql.Date date =  java.sql.Date.valueOf(localdate);
-                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateArrive(date);
-                List<Utilisateur> users = new ArrayList<>();
-                for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
-                    users.add(annuaireEquipe.getAnnuaire().getUser());
-                }
-                return users;
-            }
-            case "dated" : {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
-                LocalDate localdate = LocalDate.parse(name, formatter);
-                java.sql.Date date =  java.sql.Date.valueOf(localdate);
-                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateSortie(date );
-                List<Utilisateur> users = new ArrayList<>();
-                for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
-                    users.add(annuaireEquipe.getAnnuaire().getUser());
-                }
-                return users;
-            }
-            case "team" : {
-                List<LisEquipe> teams = eqrepo.findAllByEquipesLabel(name);
-                List<Utilisateur> users = new ArrayList<>();
-                for (LisEquipe team : teams){
-                    Utilisateur temp = team.getAnnuaireEquipe().getAnnuaire().getUser();
-                    if(!users.contains(temp)){
-                        users.add(temp);
-                    }
-
-                }
-                return users;
-            }
-            case "pole" : {
-                List<LisPole> poles = polerepo.findAllByName(name);
-                List<Utilisateur> users = new ArrayList<>();
-                for(LisPole pole : poles){
-                    for(LisEquipe eq : pole.getLisEquipes()){
-                        Utilisateur temp =eq.getAnnuaireEquipe().getAnnuaire().getUser();
-                        if(!users.contains(temp)){
-                            users.add(temp);
-                        }
-                    }
-                }
-                return users;
-            }
-            default:
-                return null;
-        }
-
-    }
 
     public void notifya(){
         emailService.sendSimpleMessage("","notification","bonjour, vous avez une notification");

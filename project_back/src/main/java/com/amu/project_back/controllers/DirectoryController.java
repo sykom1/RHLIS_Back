@@ -1,13 +1,21 @@
 package com.amu.project_back.controllers;
 
 import com.amu.project_back.dto.AnnuaireDTO;
-import com.amu.project_back.models.Annuaire;
-import com.amu.project_back.repository.DirectoryRepository;
-import com.amu.project_back.repository.LisEquipeRepository;
+import com.amu.project_back.models.*;
+import com.amu.project_back.models.enume.UserRole;
+import com.amu.project_back.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
+import javax.websocket.server.PathParam;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 @RestController
@@ -18,6 +26,18 @@ public class DirectoryController {
     @Autowired
     DirectoryRepository repo;
 
+    @Autowired
+    UserRepository userrepo;
+
+    @Autowired
+    LisPoleRepository polerepo;
+
+    @Autowired
+    AnnuaireEquipeRepository annrepo;
+
+    @Autowired
+    LisEquipeRepository eqrepo;
+
 
 
 
@@ -26,6 +46,12 @@ public class DirectoryController {
         return repo.findAll();
     }
 
+
+
+    @GetMapping("/directories/{id}")
+    public Annuaire getAnnuaireById(@PathVariable Long id) {
+        return repo.findById(id).get();
+    }
 
     //@GetMapping(value = "/directories/{id}")
     /*public Annuaire getAnnuaire(@PathVariable Integer id) {
@@ -51,10 +77,42 @@ public class DirectoryController {
         return repo.save(annuaire);
     }
 
+    @GetMapping("/search")
+    public Iterable<Annuaire> getUsersBy(@PathParam("type") String type, @PathParam("name") String name ) {
 
-    @GetMapping("/directories/{id}")
-    public Annuaire getAnnuaireById(@PathVariable Long id) {
-        return repo.findById(id).get();
+        System.out.println("-----------------------aa");
+        switch (type){
+            case "role" : {
+                System.out.println("-------------------------on passe");
+                return   repo.findAllByUserRoleLike(UserRole.valueOf(name.toUpperCase()));
+
+            }
+            case "datea" : {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
+                LocalDate localdate = LocalDate.parse(name, formatter);
+                java.sql.Date date =  java.sql.Date.valueOf(localdate);
+                return repo.findAllByDateA(date);
+            }
+            case "dated" : {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
+                LocalDate localdate = LocalDate.parse(name, formatter);
+                java.sql.Date date =  java.sql.Date.valueOf(localdate);
+                return repo.findAllByDateD(date);
+            }
+            case "team" : {
+                return repo.findAllByAnnuaireEquipes_Label(name);
+
+            }
+            case "pole" : {
+               return repo.findAllByAnnuairePole(name);
+            }
+            case "status" :{
+                return repo.findAllByStatus(name);
+            }
+            default:
+                return null;
+        }
+
     }
 
 

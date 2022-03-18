@@ -33,8 +33,8 @@ public class LisEquipe implements Serializable {
 	private String equipesNomLong;
 
 	//bi-directional one-to-one association to AnnuaireEquipe
-	@OneToOne(mappedBy="lisEquipe")
-	private AnnuaireEquipe annuaireEquipe;
+	@OneToMany(mappedBy="lisEquipe")
+	private List<AnnuaireEquipe> annuaireEquipe;
 
 	//bi-directional many-to-many association to LisPole
 	@ManyToMany(mappedBy = "lisEquipes")

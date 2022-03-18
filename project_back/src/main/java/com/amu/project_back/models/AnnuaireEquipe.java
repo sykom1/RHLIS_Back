@@ -34,8 +34,6 @@ public class AnnuaireEquipe implements Serializable {
 	@Column(name="ann_bureau")
 	private String annBureau;
 
-	@Column(name="ann_lis_grade")
-	private TeamRank annLisGrade;
 
 	@Column(name="ann_tel_pro1")
 	private String annTelPro1;
@@ -43,8 +41,9 @@ public class AnnuaireEquipe implements Serializable {
 	@Column(name="ann_tel_pro2")
 	private String annTelPro2;
 
-	@Column(name="annuaire_equipes_eq_id")
-	private int annuaireEquipesEqId;
+	@ManyToOne
+	@JoinColumn(name="annuaire_equipes_eq_id")
+	private LisEquipe lisEquipe;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="date_arrive")
@@ -65,10 +64,6 @@ public class AnnuaireEquipe implements Serializable {
 	@JoinColumn(name="annuaire_equipes_ann_id")
 	private Annuaire annuaire;
 
-	//bi-directional one-to-one association to LisEquipe
-	@OneToOne
-	@JoinColumn(name="annuaire_equipes_id")
-	private LisEquipe lisEquipe;
 
 
 

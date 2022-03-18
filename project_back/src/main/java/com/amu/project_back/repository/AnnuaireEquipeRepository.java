@@ -12,4 +12,6 @@ public interface AnnuaireEquipeRepository extends JpaRepository<AnnuaireEquipe, 
     List<AnnuaireEquipe> findAllByDateArrive(Date datea);
     List<AnnuaireEquipe> findAllByDateSortie(Date dated);
 
+
+
 }

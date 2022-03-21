@@ -115,10 +115,12 @@ public class Annuaire implements Serializable {
 	private byte annQuotiteTravail;
 
 	@Column(name="ann_section_cnrs")
-	private byte annSectionCnrs;
+	@Enumerated(EnumType.STRING)
+	private Cnrs annSectionCnrs;
 
 	@Column(name="ann_section_cnu")
-	private byte annSectionCnu;
+	@Enumerated(EnumType.STRING)
+	private Cnu annSectionCnu;
 
 	@Column(name="ann_tel_perso")
 	private String annTelPerso;
@@ -137,13 +139,6 @@ public class Annuaire implements Serializable {
 	@Lob
 	private String remarques;
 
-	@Column(name="section_cnrs")
-	@Enumerated(EnumType.STRING)
-	private Cnrs sectionCnrs;
-
-	@Column(name="section_cnu")
-	@Enumerated(EnumType.STRING)
-	private Cnrs sectionCnu;
 
 	private byte titulaire;
 
@@ -218,8 +213,6 @@ public class Annuaire implements Serializable {
 		this.referent = annuaire.referent;
 		this.referentCourriel = annuaire.referentCourriel;
 		this.remarques = annuaire.remarques;
-		this.sectionCnrs = annuaire.sectionCnrs;
-		this.sectionCnu = annuaire.sectionCnu;
 		this.titulaire = annuaire.titulaire;
 		this.annuaireDiplome = annuaire.annuaireDiplome;
 		this.lisBatiment = annuaire.lisBatiment;

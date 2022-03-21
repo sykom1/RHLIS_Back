@@ -53,10 +53,10 @@ public class Utilisateur implements Serializable {
 	@NotBlank(message = "Le nom est obligatoire !")
 	private String lastname;
 
-
 	@NotBlank(message = "Le prenom est obligatoire !")
 	private String firstname;
 
+	@Temporal(TemporalType.DATE)
 	private Date birthday;
 
 	@Pattern(regexp="(^$|[0-9]{10})",message = "le numéro de téléphone doit contenir 10 chiffres")
@@ -66,8 +66,10 @@ public class Utilisateur implements Serializable {
 	@OneToOne
 	private Annuaire directory;
 
-	@OneToMany
+	@OneToMany(mappedBy="destinataire")
 	private List<Notification> notifications;
+
+	private boolean isnew = true;
 
 
 	public Utilisateur(@NotBlank(message = "L'email est obligatoire !") String email,

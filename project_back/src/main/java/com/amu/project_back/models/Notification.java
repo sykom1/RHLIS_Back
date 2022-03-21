@@ -18,6 +18,7 @@ public class Notification {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "destinataire_uti_id")
     private Utilisateur destinataire;
 
     private String objet;

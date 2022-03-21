@@ -2,7 +2,6 @@ package com.amu.project_back.models;
 
 import com.amu.project_back.models.enume.LisResponsibility;
 import com.amu.project_back.models.enume.LisStatus;
-import com.amu.project_back.models.enume.TeamRank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 
 /**

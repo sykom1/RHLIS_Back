@@ -1,6 +1,6 @@
 package com.amu.project_back.models.enume;
 
-public enum Guardianship {
+public enum Tutelles {
     
     Aix_Marseille_Universté,
             Université_de_Toulon,

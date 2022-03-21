@@ -1,5 +1,6 @@
-package com.amu.project_back.email;
+package com.amu.project_back.services;
 
+import com.amu.project_back.models.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,10 +13,13 @@ public class EmailServiceImpl {
     private JavaMailSender emailSender;
 
     public void sendSimpleMessage(
-            String to, String subject, String text) {
+            Notification notification) {
+
+        String to = notification.getDestinataire().getEmail();
+        String subject = notification.getObjet();
+        String text = notification.getMessage();
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@rhlisa.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);

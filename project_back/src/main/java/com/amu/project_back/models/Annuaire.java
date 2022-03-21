@@ -37,7 +37,7 @@ public class Annuaire implements Serializable {
 	private String annAdrPro;
 
 	@Column(name="ann_civ")
-	private String annCiv;
+	private Civ annCiv;
 
 	@Column(name="ann_comp_gen_diffusion")
 	private byte annCompGenDiffusion;
@@ -98,24 +98,18 @@ public class Annuaire implements Serializable {
 	private State annLisEtat;
 
 	@Column(name="ann_lis_sites")
-
 	@Enumerated(EnumType.STRING)
 	private Site annLisSites;
 
 	@Column(name="ann_lis_tutelles")
-
 	@Enumerated(EnumType.STRING)
-	private Guardianship annLisTutelles;
+	private Tutelles annLisTutelles;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="ann_naissance")
-	private Date annNaissance;
 
-	@Column(name="ann_nom")
-	private String annNom;
 
-	@Column(name="ann_prenom")
-	private String annPrenom;
+
+
+
 
 	@Column(name="ann_quotite_travail")
 	private byte annQuotiteTravail;
@@ -130,8 +124,12 @@ public class Annuaire implements Serializable {
 	private String annTelPerso;
 
 
+	@ManyToOne
+	@JoinColumn(name = "referent")
+	private Annuaire referent;
 
-	private String referent;
+	@OneToMany(mappedBy = "referent")
+	private List<Annuaire> personnels;
 
 	@Column(name="referent_courriel")
 	private String referentCourriel;
@@ -151,7 +149,7 @@ public class Annuaire implements Serializable {
 
 	@Column(name = "type_contrat_doc")
 	@Enumerated(EnumType.STRING)
-	private DocType docType;
+	private ContractType docType;
 
 	@Column(name = "type_financement_doc")
 	@Enumerated(EnumType.STRING)
@@ -213,9 +211,6 @@ public class Annuaire implements Serializable {
 		this.annLisEtat = annuaire.annLisEtat;
 		this.annLisSites = annuaire.annLisSites;
 		this.annLisTutelles = annuaire.annLisTutelles;
-		this.annNaissance = annuaire.annNaissance;
-		this.annNom = annuaire.annNom;
-		this.annPrenom = annuaire.annPrenom;
 		this.annQuotiteTravail = annuaire.annQuotiteTravail;
 		this.annSectionCnrs = annuaire.annSectionCnrs;
 		this.annSectionCnu = annuaire.annSectionCnu;

@@ -9,12 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -53,10 +50,6 @@ public class DirectoryController {
         return repo.findById(id).get();
     }
 
-    //@GetMapping(value = "/directories/{id}")
-    /*public Annuaire getAnnuaire(@PathVariable Integer id) {
-        return repo.getById(Long.valueOf(id));
-    } */
 
 
     @PutMapping(value = "/directories/{id}")
@@ -74,6 +67,7 @@ public class DirectoryController {
     public Annuaire saveAnnuaire(@RequestBody AnnuaireDTO annuaireDTO) {
         ModelMapper mapper = new ModelMapper();
         Annuaire annuaire = mapper.map(annuaireDTO, Annuaire.class);
+        annuaire.getUser().setIsnew(false);
         return repo.save(annuaire);
     }
 

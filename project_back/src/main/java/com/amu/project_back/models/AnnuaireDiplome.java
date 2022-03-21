@@ -1,6 +1,6 @@
 package com.amu.project_back.models;
 
-import com.amu.project_back.models.enume.LisDefense;
+import com.amu.project_back.models.enume.LisSoutenance;
 import com.amu.project_back.models.enume.LisDiploma;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -69,7 +69,7 @@ public class AnnuaireDiplome implements Serializable {
 	private LisDiploma lisDiplome;
 
 	@Column(name="lis_soutenance")
-	private LisDefense lisSoutenance;
+	private LisSoutenance lisSoutenance;
 
 	//bi-directional many-to-one association to Annuaire
 	@OneToMany(mappedBy="annuaireDiplome")

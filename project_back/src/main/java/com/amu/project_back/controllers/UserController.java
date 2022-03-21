@@ -1,14 +1,12 @@
 package com.amu.project_back.controllers;
 
 import com.amu.project_back.dto.UtilisateursDTO;
-import com.amu.project_back.email.EmailServiceImpl;
 import com.amu.project_back.exception.ExceptionsHandler;
 import com.amu.project_back.models.*;
 import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.repository.*;
+import com.amu.project_back.services.NotificationService;
 import com.amu.project_back.util.JwtUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
-import javax.websocket.server.PathParam;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api")
@@ -53,11 +41,12 @@ public class UserController extends ExceptionsHandler {
     JwtUtil jwtTokenUtil;
 
 
+    @Autowired
+    NotificationService notificationService;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Autowired
-    EmailServiceImpl emailService;
+
 
     /*
    @PostConstruct
@@ -100,20 +89,32 @@ public class UserController extends ExceptionsHandler {
         return repo.save(oldUser);
     }
 
+    @Autowired
+    DirectoryRepository dirrepo;
     @PostMapping(value = "/users")
-    public Utilisateur saveUser(@RequestBody UtilisateursDTO userDTO) {
+    public Utilisateur saveUser(@RequestBody UtilisateursDTO userDTO,@RequestParam long id) {
         ModelMapper mapper = new ModelMapper();
         Utilisateur user = mapper.map(userDTO, Utilisateur.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        Annuaire annuaire = new Annuaire();
+        Annuaire ref = dirrepo.getById(id);
+        annuaire.setReferent(ref);
+        user.setDirectory(annuaire);
+        notificationService.notifyAllSAF(user.getEmail(),ref.getUser().getFirstname() + " " + ref.getUser().getLastname());
         return repo.save(user);
     }
 
+    @GetMapping(value = "/users/ref/{id}")
+    public Iterable<Annuaire> getUsersByRef(@PathVariable long id){
+        Annuaire ref = dirrepo.getById(id);
+        return ref.getPersonnels();
 
-   /* @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return repo.findById(id).get();
-    } */
+    }
+
+    @GetMapping(value = "/users/new")
+    public Iterable<Utilisateur> getNewUsers(){
+        return repo.findAllByIsnewTrueAndRoleNot(UserRole.ADMIN);
+    }
 
 
 
@@ -157,13 +158,5 @@ public class UserController extends ExceptionsHandler {
         return ResponseEntity.ok("Déconnexion réussite");
     }
 
-
-
-
-
-    public void notifya(){
-        emailService.sendSimpleMessage("","notification","bonjour, vous avez une notification");
-
-    }
 
 }

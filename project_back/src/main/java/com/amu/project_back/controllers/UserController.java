@@ -105,6 +105,7 @@ public class UserController extends ExceptionsHandler {
         ModelMapper mapper = new ModelMapper();
         Utilisateur user = mapper.map(userDTO, Utilisateur.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return repo.save(user);
     }
 

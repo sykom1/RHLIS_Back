@@ -79,12 +79,11 @@ public class DirectoryController {
 
     @GetMapping("/search")
     public Iterable<Annuaire> getUsersBy(@PathParam("type") String type, @PathParam("name") String name ) {
-
-        System.out.println("-----------------------aa");
+        System.out.println(name);
         switch (type){
+
             case "role" : {
-                System.out.println("-------------------------on passe");
-                return   repo.findAllByUserRoleLike(UserRole.valueOf(name.toUpperCase()));
+                return repo.findAllByUser_RoleLike(UserRole.valueOf(name.toUpperCase()));
 
             }
             case "datea" : {

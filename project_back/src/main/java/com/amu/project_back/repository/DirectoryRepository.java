@@ -19,7 +19,7 @@ public interface DirectoryRepository extends JpaRepository<Annuaire, Long> {
             "and e.equipesId = ae.lisEquipe.equipesId  and pole.name = :name")
     List<Annuaire> findAllByAnnuairePole(@Param("name") String name);
 
-    List<Annuaire> findAllByUserRoleLike(UserRole name);
+    List<Annuaire> findAllByUser_RoleLike(UserRole name);
 
 
     @Query("SELECT a from Annuaire a join a.annuaireEquipes eq where eq.lisStatut = :name")

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -64,6 +65,9 @@ public class Utilisateur implements Serializable {
 
 	@OneToOne
 	private Annuaire directory;
+
+	@OneToMany
+	private List<Notification> notifications;
 
 
 	public Utilisateur(@NotBlank(message = "L'email est obligatoire !") String email,

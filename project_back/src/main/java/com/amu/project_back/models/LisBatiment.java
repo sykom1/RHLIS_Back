@@ -35,7 +35,7 @@ public class LisBatiment implements Serializable {
 	@Column(name="bat_label")
 	private String batLabel;
 
-	@Column(name="bat_site_id")
+	@Column(name="bat_site")
 	@Enumerated(EnumType.STRING)
 	private Site batSite;
 

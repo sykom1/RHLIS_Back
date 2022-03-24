@@ -1,6 +1,7 @@
 package com.amu.project_back.models;
 
 import com.amu.project_back.models.enume.ContractType;
+import com.amu.project_back.models.enume.TypeFinance;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,8 +38,7 @@ public class AnnuaireComplementDoctorant implements Serializable {
 	@Column(name="ann_comp_doc_codir_these_nlis")
 	private String annCompDocCodirTheseNlis;
 
-	@Column(name="ann_comp_doc_contrat_id")
-	private BigInteger annCompDocContratId;
+
 
 	@Column(name="ann_comp_doc_dir_these_lis")
 	private BigInteger annCompDocDirTheseLis;
@@ -46,24 +46,21 @@ public class AnnuaireComplementDoctorant implements Serializable {
 	@Column(name="ann_comp_doc_dir_these_nlis")
 	private String annCompDocDirTheseNlis;
 
-	@Lob
-	@Column(name="ann_comp_doc_sujet")
-	private String annCompDocSujet;
+
 
 	@Column(name="ann_comp_doc_titre_these")
 	private String annCompDocTitreThese;
 
-	@Column(name="ann_comp_doc_type_contrat_autre")
-	private String annCompDocTypeContratAutre;
 
 	@Column(name="ann_comp_doc_type_contrat_id")
-	private BigInteger annCompDocTypeContratId;
+	private ContractType annCompDocTypeContratId;
 
 	@Column(name="ann_comp_doc_type_financement_id")
-	private BigInteger annCompDocTypeFinancementId;
+	private TypeFinance annCompDocTypeFinancementId;
 
-	@Column(name="type_contrat")
-	private ContractType typeContrat;
+
+	@Column(name = "devenir_doc")
+	private String devenirDoc;
 
 	//bi-directional many-to-one association to LisEd
 	@ManyToOne

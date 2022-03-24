@@ -1,6 +1,5 @@
 package com.amu.project_back.models;
 
-import com.amu.project_back.models.enume.LisResponsibility;
 import com.amu.project_back.models.enume.LisStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,7 +51,7 @@ public class AnnuaireEquipe implements Serializable {
 	private Date dateSortie;
 
 	@Column(name="lis_responsabilité")
-	private LisResponsibility lisResponsabilité;
+	private int lisResponsabilité;
 
 	@Column(name="lis_statut")
 	private LisStatus lisStatut;

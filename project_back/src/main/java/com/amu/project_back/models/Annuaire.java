@@ -39,8 +39,7 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_civ")
 	private Civ annCiv;
 
-	@Column(name="ann_comp_gen_diffusion")
-	private byte annCompGenDiffusion;
+
 
 	@Column(name="ann_comp_gen_hal")
 	private String annCompGenHal;
@@ -48,14 +47,11 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_comp_gen_lk")
 	private String annCompGenLk;
 
-	@Column(name="ann_comp_gen_orcid")
-	private String annCompGenOrcid;
 
-	@Column(name="ann_comp_gen_photo")
-	private String annCompGenPhoto;
 
-	@Column(name="ann_comp_gen_reseda")
-	private String annCompGenReseda;
+
+
+
 
 	@Column(name="ann_comp_gen_url")
 	private String annCompGenUrl;
@@ -69,22 +65,12 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_courriel2")
 	private String annCourriel2;
 
-	@Column(name="ann_emerite")
-	private byte annEmerite;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="ann_emerite_date")
-	private Date annEmeriteDate;
-
-	@Column(name="ann_etat")
-	private byte annEtat;
 
 	@Column(name="ann_hdr")
 	private byte annHdr;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="ann_hdr_date")
-	private Date annHdrDate;
+
 
 	@Column(name="ann_ldap_uid")
 	private String annLdapUid;
@@ -104,10 +90,6 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_lis_tutelles")
 	@Enumerated(EnumType.STRING)
 	private Tutelles annLisTutelles;
-
-
-
-
 
 
 
@@ -133,11 +115,7 @@ public class Annuaire implements Serializable {
 	@OneToMany(mappedBy = "referent")
 	private List<Annuaire> personnels;
 
-	@Column(name="referent_courriel")
-	private String referentCourriel;
 
-	@Lob
-	private String remarques;
 
 
 	private byte titulaire;
@@ -186,21 +164,13 @@ public class Annuaire implements Serializable {
 		this.annAdrPerso = annuaire.annAdrPerso;
 		this.annAdrPro = annuaire.annAdrPro;
 		this.annCiv = annuaire.annCiv;
-		this.annCompGenDiffusion = annuaire.annCompGenDiffusion;
 		this.annCompGenHal = annuaire.annCompGenHal;
 		this.annCompGenLk = annuaire.annCompGenLk;
-		this.annCompGenOrcid = annuaire.annCompGenOrcid;
-		this.annCompGenPhoto = annuaire.annCompGenPhoto;
-		this.annCompGenReseda = annuaire.annCompGenReseda;
 		this.annCompGenUrl = annuaire.annCompGenUrl;
 		this.annCourriel = annuaire.annCourriel;
 		this.annCourrielPerso = annuaire.annCourrielPerso;
 		this.annCourriel2 = annuaire.annCourriel2;
-		this.annEmerite = annuaire.annEmerite;
-		this.annEmeriteDate = annuaire.annEmeriteDate;
-		this.annEtat = annuaire.annEtat;
 		this.annHdr = annuaire.annHdr;
-		this.annHdrDate = annuaire.annHdrDate;
 		this.annLdapUid = annuaire.annLdapUid;
 		this.annLisComposantes = annuaire.annLisComposantes;
 		this.annLisEtat = annuaire.annLisEtat;
@@ -211,8 +181,6 @@ public class Annuaire implements Serializable {
 		this.annSectionCnu = annuaire.annSectionCnu;
 		this.annTelPerso = annuaire.annTelPerso;
 		this.referent = annuaire.referent;
-		this.referentCourriel = annuaire.referentCourriel;
-		this.remarques = annuaire.remarques;
 		this.titulaire = annuaire.titulaire;
 		this.annuaireDiplome = annuaire.annuaireDiplome;
 		this.lisBatiment = annuaire.lisBatiment;

@@ -14,4 +14,5 @@ public interface AnnuaireEquipeRepository extends JpaRepository<AnnuaireEquipe, 
 
 
 
+
 }

@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,8 +39,6 @@ public class UserController extends ExceptionsHandler {
 
     @Autowired
     UserDetailsService userDetailsService;
-
-
 
     @Autowired
     TokenEntityRepository tokenEntityRepository;
@@ -169,5 +171,6 @@ public class UserController extends ExceptionsHandler {
         repo.save(user);
         return ResponseEntity.ok("Mot de passe changé");
     }
+
 
 }

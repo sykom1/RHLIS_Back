@@ -1,5 +1,6 @@
 package com.amu.project_back.models;
 
+import com.amu.project_back.models.enume.LisDiploma;
 import com.amu.project_back.models.enume.LisStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,17 +52,22 @@ public class AnnuaireEquipe implements Serializable {
 	private Date dateSortie;
 
 	@Column(name="lis_responsabilité")
-	private int lisResponsabilité;
+	private int lisResponsabilite;
 
 	@Column(name="lis_statut")
+	@Enumerated(EnumType.STRING)
 	private LisStatus lisStatut;
 
-	//bi-directional many-to-one association to Annuaire
+	@Enumerated(EnumType.STRING)
+	private LisDiploma diplome;
+
 	@ManyToOne
 	@JoinColumn(name="annuaire_equipes_ann_id")
 	private Annuaire annuaire;
 
 
+	@OneToOne
+	AnnuaireComplementDoctorant doctorant;
 
 
 

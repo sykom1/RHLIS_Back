@@ -118,20 +118,11 @@ public class Annuaire implements Serializable {
 
 
 
-	private byte titulaire;
+	private int titulaire;
 
-	@Column(name = "type_contrat_doc")
-	@Enumerated(EnumType.STRING)
-	private ContractType docType;
 
-	@Column(name = "type_financement_doc")
-	@Enumerated(EnumType.STRING)
-	private TypeFinance typeFinance;
 
-	//bi-directional many-to-one association to AnnuaireDiplome
-	@ManyToOne
-	@JoinColumn(name="annuaire_diplome_ann_diplome_id")
-	private AnnuaireDiplome annuaireDiplome;
+
 
 	//bi-directional many-to-one association to LisBatiment
 	@ManyToOne
@@ -182,7 +173,6 @@ public class Annuaire implements Serializable {
 		this.annTelPerso = annuaire.annTelPerso;
 		this.referent = annuaire.referent;
 		this.titulaire = annuaire.titulaire;
-		this.annuaireDiplome = annuaire.annuaireDiplome;
 		this.lisBatiment = annuaire.lisBatiment;
 		this.lisPay = annuaire.lisPay;
 		this.annuaireEquipes = annuaire.annuaireEquipes;

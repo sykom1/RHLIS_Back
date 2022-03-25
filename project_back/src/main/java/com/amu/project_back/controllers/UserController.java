@@ -3,6 +3,7 @@ package com.amu.project_back.controllers;
 import com.amu.project_back.dto.UtilisateursDTO;
 import com.amu.project_back.exception.ExceptionsHandler;
 import com.amu.project_back.models.*;
+import com.amu.project_back.models.enume.Cnu;
 import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.repository.*;
 import com.amu.project_back.services.NotificationService;
@@ -18,6 +19,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -118,6 +122,7 @@ public class UserController extends ExceptionsHandler {
 
 
 
+
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteUser(@PathVariable Long id) {
@@ -158,5 +163,16 @@ public class UserController extends ExceptionsHandler {
         return ResponseEntity.ok("Déconnexion réussite");
     }
 
+
+    @PutMapping(value = "/users/{id}/password")
+    public ResponseEntity<?> modifyPassword(@PathVariable long id, @RequestBody Map<String, String> passwords) {
+        Utilisateur user = repo.findById(id).get();
+        if(!passwords.get("newPassword").equals(passwords.get("confirmNewPassword"))) {
+            return new ResponseEntity<>("Mot de passe et la confirmation ne sont pas identiques", HttpStatus.CONFLICT);
+        }
+        user.setPassword(passwordEncoder.encode(passwords.get("newPassword")));
+        repo.save(user);
+        return ResponseEntity.ok("Mot de passe changé");
+    }
 
 }

@@ -38,8 +38,6 @@ public class AnnuaireComplementDoctorant implements Serializable {
 	@Column(name="ann_comp_doc_codir_these_nlis")
 	private String annCompDocCodirTheseNlis;
 
-
-
 	@Column(name="ann_comp_doc_dir_these_lis")
 	private BigInteger annCompDocDirTheseLis;
 
@@ -52,20 +50,21 @@ public class AnnuaireComplementDoctorant implements Serializable {
 	private String annCompDocTitreThese;
 
 
-	@Column(name="ann_comp_doc_type_contrat_id")
-	private ContractType annCompDocTypeContratId;
+	@Column(name = "type_contrat_doc")
+	@Enumerated(EnumType.STRING)
+	private ContractType docType;
 
-	@Column(name="ann_comp_doc_type_financement_id")
-	private TypeFinance annCompDocTypeFinancementId;
-
+	@Column(name = "type_financement_doc")
+	@Enumerated(EnumType.STRING)
+	private TypeFinance typeFinance;
 
 	@Column(name = "devenir_doc")
 	private String devenirDoc;
 
-	//bi-directional many-to-one association to LisEd
 	@ManyToOne
 	@JoinColumn(name="lis_ed_lis_ed_id")
 	private LisEd lisEd;
 
-
+	@OneToOne
+	AnnuaireEquipe equipe;
 }

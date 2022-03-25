@@ -20,6 +20,11 @@ public class EnumController {
 
         return ResponseEntity.ok(Arrays.asList(Cnu.values()));
     }
+    @GetMapping(value = "/cnrs")
+    public ResponseEntity<?> getCnrs(){
+
+        return ResponseEntity.ok(Arrays.asList(Cnrs.values()));
+    }
 
     @GetMapping(value = "/component")
     public ResponseEntity<?> getComp(){

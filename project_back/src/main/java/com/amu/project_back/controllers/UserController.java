@@ -1,6 +1,6 @@
 package com.amu.project_back.controllers;
 
-import com.amu.project_back.dto.UtilisateursDTO;
+
 import com.amu.project_back.exception.ExceptionsHandler;
 import com.amu.project_back.models.*;
 import com.amu.project_back.models.enume.Cnu;
@@ -85,9 +85,7 @@ public class UserController extends ExceptionsHandler {
 
 
     @PutMapping(value = "/users/{id}")
-    public Utilisateur modifyUser(@PathVariable Integer id,@RequestBody UtilisateursDTO userDTO) {
-        ModelMapper mapper = new ModelMapper();
-        Utilisateur newUser = mapper.map(userDTO, Utilisateur.class);
+    public Utilisateur modifyUser(@PathVariable Integer id,@RequestBody Utilisateur newUser) {
         Utilisateur oldUser = repo.findById(Long.valueOf(id)).get();
         oldUser.setUser(newUser);
         return repo.save(oldUser);
@@ -95,10 +93,9 @@ public class UserController extends ExceptionsHandler {
 
     @Autowired
     DirectoryRepository dirrepo;
+
     @PostMapping(value = "/users")
-    public Utilisateur saveUser(@RequestBody UtilisateursDTO userDTO,@RequestParam long id) {
-        ModelMapper mapper = new ModelMapper();
-        Utilisateur user = mapper.map(userDTO, Utilisateur.class);
+    public Utilisateur saveUser(@RequestBody Utilisateur user,@RequestParam long id) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Annuaire annuaire = new Annuaire();
         Annuaire ref = dirrepo.getById(id);
@@ -119,8 +116,6 @@ public class UserController extends ExceptionsHandler {
     public Iterable<Utilisateur> getNewUsers(){
         return repo.findAllByIsnewTrueAndRoleNot(UserRole.ADMIN);
     }
-
-
 
 
     @DeleteMapping("/users/{id}")

@@ -1,6 +1,6 @@
 package com.amu.project_back.controllers;
 
-import com.amu.project_back.dto.AnnuaireDTO;
+
 import com.amu.project_back.models.*;
 import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.repository.*;
@@ -53,9 +53,8 @@ public class DirectoryController {
 
 
     @PutMapping(value = "/directories/{id}")
-    public Annuaire modifyAnnuaire(@PathVariable Integer id, @RequestBody AnnuaireDTO annuaireDTO) {
-        ModelMapper mapper = new ModelMapper();
-        Annuaire newAnnuaire = mapper.map(annuaireDTO, Annuaire.class);
+    public Annuaire modifyAnnuaire(@PathVariable Integer id, @RequestBody Annuaire newAnnuaire) {
+
         Annuaire oldAnnuaire = repo.findById(Long.valueOf(id)).get();
         oldAnnuaire.setAnnuaire(newAnnuaire);
         return repo.save(oldAnnuaire);
@@ -64,9 +63,7 @@ public class DirectoryController {
 
 
     @PostMapping(value = "/directories")
-    public Annuaire saveAnnuaire(@RequestBody AnnuaireDTO annuaireDTO) {
-        ModelMapper mapper = new ModelMapper();
-        Annuaire annuaire = mapper.map(annuaireDTO, Annuaire.class);
+    public Annuaire saveAnnuaire(@RequestBody Annuaire annuaire) {
         annuaire.getUser().setIsnew(false);
         return repo.save(annuaire);
     }

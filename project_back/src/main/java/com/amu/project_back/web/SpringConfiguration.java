@@ -30,7 +30,7 @@ public class SpringConfiguration extends SpringBootServletInitializer implements
 	@Value("${allowed.origin}")
 	String allowedOrigin;
 
-	@Bean
+	/*@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
@@ -38,7 +38,7 @@ public class SpringConfiguration extends SpringBootServletInitializer implements
 				registry.addMapping("/**").allowedOrigins(allowedOrigin);
 			}
 		};
-	}
+	} */
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {

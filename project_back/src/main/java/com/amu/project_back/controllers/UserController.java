@@ -157,7 +157,8 @@ public class UserController extends ExceptionsHandler {
             Integer tokenId = tokenEnt.getId();
             tokenEntityRepository.deleteById(tokenId);
         }
-        return ResponseEntity.ok("Déconnexion réussite");
+
+        return ResponseEntity.ok("");
     }
 
 
@@ -169,7 +170,7 @@ public class UserController extends ExceptionsHandler {
         }
         user.setPassword(passwordEncoder.encode(passwords.get("newPassword")));
         repo.save(user);
-        return ResponseEntity.ok("Mot de passe changé");
+        return ResponseEntity.ok("");
     }
 
 

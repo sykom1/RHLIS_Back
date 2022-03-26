@@ -1,7 +1,9 @@
 package com.amu.project_back.models;
 
 import com.amu.project_back.models.enume.UserRole;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +29,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name="utilisateurs")
 @NamedQuery(name="Utilisateur.findAll", query="SELECT u FROM Utilisateur u")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Utilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +69,7 @@ public class Utilisateur implements Serializable {
 	@OneToOne
 	private Annuaire directory;
 
-	@OneToMany(mappedBy="destinataire")
+	@OneToMany(mappedBy="destinataire",fetch = FetchType.LAZY)
 	private List<Notification> notifications;
 
 	private boolean isnew = true;

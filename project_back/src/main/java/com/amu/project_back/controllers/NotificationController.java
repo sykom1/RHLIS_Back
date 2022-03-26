@@ -46,12 +46,16 @@ public class NotificationController {
 
         List<AnnuaireEquipe> dates = annuaireEquipeRepository.findAllByDateSortie(inMonth);
 
-        ArrayList<Utilisateur> users = new ArrayList<>();
-        for(AnnuaireEquipe date : dates){
-            users.add(date.getAnnuaire().getUser());
+
+        if(!dates.isEmpty()){
+            ArrayList<Utilisateur> users = new ArrayList<>();
+            for(AnnuaireEquipe date : dates){
+                users.add(date.getAnnuaire().getUser());
+            }
+            notificationService.notifyAllSAFList(users);
+            notificationService.notifyAllRefList(users);
         }
-        notificationService.notifyAllSAFList(users);
-        notificationService.notifyAllRefList(users);
+
 
     }
 

@@ -61,13 +61,17 @@ public class NotificationController {
 
     @GetMapping("/users/{id}/notifs")
     public List<Notification> getUserNotifs(@PathVariable Long id){
-        return repo.getById(id).getNotifications();
-
+        return notificationRepository.findByDestinataireIdOrderByIdDesc(id);
+    }
+    
+    @GetMapping("/users/{id}/notifs/number")
+    public Integer getUserNotifsSize(@PathVariable Long id){
+        return notificationRepository.findByVuFalseAndDestinataireId(id).size();
     }
 
-    @GetMapping("/notif/{id}")
+    @GetMapping("/notifs/{id}")
     public ResponseEntity<?> setVu(@PathVariable Long id){
-        Notification notification = notificationRepository.getById(id);
+        Notification notification = notificationRepository.findById(id).get();
         notification.setVu(true);
         notification = notificationRepository.save(notification);
         return ResponseEntity.ok(notification);

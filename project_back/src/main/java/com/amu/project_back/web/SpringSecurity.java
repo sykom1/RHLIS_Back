@@ -38,16 +38,14 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().cors().and()
 			.authorizeRequests().antMatchers("/api/login").permitAll()
 			.antMatchers("/api/users").hasAnyAuthority(UserRole.ADMIN.getAuthority(),
-						UserRole.REFERENT.getAuthority())
+						UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
 				.antMatchers("/api/directories").hasAnyAuthority(UserRole.ADMIN.getAuthority(),UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
 				.antMatchers("/api/users/new").hasAnyAuthority(UserRole.ADMIN.getAuthority(),UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
-				.antMatchers("/api/users/{id}").hasAnyAuthority(UserRole.ADMIN.getAuthority(),
-						UserRole.SERVICE_ADMINISTRATIF_FINANCIER.getAuthority())
-			.antMatchers("/api/logout").authenticated()
+				.antMatchers("/api/users/{id}").authenticated()
+				.antMatchers("/api/logout").authenticated()
 				.antMatchers("/api/directories/{id}").authenticated()
-
-			.antMatchers("/api/**").authenticated()
-			.anyRequest().permitAll()
+				.antMatchers("/api/**").authenticated()
+				.anyRequest().permitAll()
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -26,19 +26,19 @@ public class EnumController {
         return ResponseEntity.ok(Arrays.asList(Cnrs.values()));
     }
 
-    @GetMapping(value = "/component")
+    @GetMapping(value = "/components")
     public ResponseEntity<?> getComp(){
 
         return ResponseEntity.ok(Arrays.asList(Component.values()));
     }
 
-    @GetMapping(value = "/contract")
+    @GetMapping(value = "/contracts")
     public ResponseEntity<?> getContract(){
 
         return ResponseEntity.ok(Arrays.asList(ContractType.values()));
     }
 
-    @GetMapping(value = "/diploma")
+    @GetMapping(value = "/diplomas")
     public ResponseEntity<?> getDiploma(){
 
         return ResponseEntity.ok(Arrays.asList(LisDiploma.values()));
@@ -50,7 +50,7 @@ public class EnumController {
         return ResponseEntity.ok(Arrays.asList(LisStatus.values()));
     }
 
-    @GetMapping(value = "/state")
+    @GetMapping(value = "/states")
     public ResponseEntity<?> getState(){
 
         return ResponseEntity.ok(Arrays.asList(State.values()));
@@ -63,7 +63,7 @@ public class EnumController {
     }
 
 
-    @GetMapping(value = "/finance")
+    @GetMapping(value = "/finances")
     public ResponseEntity<?> getFinance(){
 
         return ResponseEntity.ok(Arrays.asList(TypeFinance.values()));

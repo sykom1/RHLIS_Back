@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -34,16 +35,33 @@ public class DirectoryController {
 
     @Autowired
     LisEquipeRepository eqrepo;
-
-
-
+    
+    @Autowired
+    LisBatimentRepository lisBatimentRepository;
 
     @GetMapping(value = "/directories")
     public Iterable<Annuaire> getAnnuaire() {
         return repo.findAll();
     }
 
-
+    @GetMapping(value = "/directories-teams")
+    public List<AnnuaireEquipe> getAnnuaireEquipe() {
+    	List<AnnuaireEquipe> listAnnuaireEquipe = annrepo.findAll();
+//    	for(int i = 0 ; i <=) {
+//    		listAnnuaireEquipe.get(0).setAnnuaire(repo.findById(el.getAnnuaire().getAnnId()).get());
+//    	}
+        return listAnnuaireEquipe;
+    }
+    
+    @GetMapping(value = "/batiments")
+    public List<LisBatiment> getLisBatiments() {
+        return lisBatimentRepository.findAll();
+    }
+    
+    @GetMapping(value = "/directories-teams/{id}")
+    public List<AnnuaireEquipe> getAnnuaireEquipe(@PathVariable Long id) {
+        return annrepo.findByAnnuaireAnnId(id);
+    }
 
     @GetMapping("/directories/{id}")
     public Annuaire getAnnuaireById(@PathVariable Long id) {

@@ -30,7 +30,7 @@ public class NotificationService {
             Notification notification = new Notification();
             notification.setDestinataire(saf);
             notification.setObjet("Nouvel entrant");
-            notification.setMessage("<p> Le nouvel entrant " + nouvelEntrant +  " vient d'être ajouté par "+ ref +" <p>" );
+            notification.setMessage("Le nouvel entrant " + nouvelEntrant +  " vient d'être ajouté par "+ ref );
             notification.setVu(false);
             emailService.sendSimpleMessage(notification);
             notificationRepository.save(notification);

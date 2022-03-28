@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -36,6 +37,12 @@ public class UserController extends ExceptionsHandler {
 
     @Autowired
     UserRepository repo;
+    
+    @Autowired
+    DirectoryRepository directoryRepository;
+    
+    @Autowired
+    AnnuaireEquipeRepository annuaireEquipeRepository;
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -77,7 +84,7 @@ public class UserController extends ExceptionsHandler {
 
     @GetMapping(value = "/users/{id}")
     public Utilisateur getUser(@PathVariable Integer id) {
-        return repo.getById(Long.valueOf(id));
+        return repo.findById(Long.valueOf(id)).get();
     }
 
     @GetMapping(value = "/referent/users/{id}")
@@ -85,31 +92,51 @@ public class UserController extends ExceptionsHandler {
         return repo.getById(Long.valueOf(id));
     }
 
-
+    @Transactional
     @PutMapping(value = "/users/{id}")
     public Utilisateur modifyUser(@PathVariable Integer id,@RequestBody Utilisateur newUser) {
         Utilisateur oldUser = repo.findById(Long.valueOf(id)).get();
-        oldUser.setUser(newUser);
+        Annuaire oldAnnuaire = directoryRepository.findById(newUser.getDirectory().getAnnId()).get();
+        oldAnnuaire.setAnnuaire(newUser.getDirectory());
+        directoryRepository.save(oldAnnuaire);
+        oldUser.setPhoneNumber(newUser.getPhoneNumber());
         return repo.save(oldUser);
     }
 
-    @Autowired
-    DirectoryRepository dirrepo;
+    
 
+    @Transactional
     @PostMapping(value = "/users")
-    public Utilisateur saveUser(@RequestBody Utilisateur user,@RequestParam long id) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Annuaire annuaire = new Annuaire();
-        Annuaire ref = dirrepo.getById(id);
+    public AnnuaireEquipe saveUser(@RequestBody AnnuaireEquipe annuaireEquipe, @RequestParam Long id) {
+    	//enregistrer l'utilisateur en premier
+    	Utilisateur user = annuaireEquipe.getAnnuaire().getUser();
+        user.setPassword(passwordEncoder.encode(user.getEmail()));
+        user = repo.save(user); 
+        
+        //enregistrer l'annuaire
+        Annuaire ref = directoryRepository.findById(id).get();
+        Annuaire annuaire = annuaireEquipe.getAnnuaire();
         annuaire.setReferent(ref);
+        annuaire.setUser(user);
+        annuaire = directoryRepository.save(annuaire);
+        
+        //enregistrer l'annuaire dans utilisateur
         user.setDirectory(annuaire);
+        user = repo.save(user);
+        
+        //enregister dans annuaire-equipe
+        annuaireEquipe.setAnnuaire(annuaire);
+        annuaireEquipe = annuaireEquipeRepository.save(annuaireEquipe);
+        
+        //notifier le service administratif
         notificationService.notifyAllSAF(user.getEmail(),ref.getUser().getFirstname() + " " + ref.getUser().getLastname());
-        return repo.save(user);
+        
+        return annuaireEquipe;
     }
 
     @GetMapping(value = "/users/ref/{id}")
     public Iterable<Annuaire> getUsersByRef(@PathVariable long id){
-        Annuaire ref = dirrepo.getById(id);
+        Annuaire ref = directoryRepository.getById(id);
         return ref.getPersonnels();
 
     }

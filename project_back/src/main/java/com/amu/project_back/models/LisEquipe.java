@@ -1,11 +1,24 @@
 package com.amu.project_back.models;
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.Valid;
-import java.util.List;
 
 
 /**
@@ -32,10 +45,12 @@ public class LisEquipe implements Serializable {
 	@Column(name="equipes_nom_long")
 	private String equipesNomLong;
 
+	@JsonIgnore
 	//bi-directional one-to-one association to AnnuaireEquipe
 	@OneToMany(mappedBy="lisEquipe")
 	private List<AnnuaireEquipe> annuaireEquipe;
 
+	@JsonIgnore
 	//bi-directional many-to-many association to LisPole
 	@ManyToMany(mappedBy = "lisEquipes")
 	private List<LisPole> lisPoles;

@@ -2,6 +2,9 @@ package com.amu.project_back.models;
 
 import com.amu.project_back.models.enume.LisDiploma;
 import com.amu.project_back.models.enume.LisStatus;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,13 +24,14 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name="annuaire_equipes")
 @NamedQuery(name="AnnuaireEquipe.findAll", query="SELECT a FROM AnnuaireEquipe a")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "annuaireEquipesId")
 public class AnnuaireEquipe implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="annuaire_equipes_id")
-	private String annuaireEquipesId;
+	private Long annuaireEquipesId;
 
 	@Column(name="ann_bureau")
 	private String annBureau;

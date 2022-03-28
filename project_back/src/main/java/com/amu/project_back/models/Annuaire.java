@@ -1,6 +1,10 @@
 package com.amu.project_back.models;
 
 import com.amu.project_back.models.enume.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,13 +24,14 @@ import java.util.List;
 @Valid
 @NoArgsConstructor
 @NamedQuery(name="Annuaire.findAll", query="SELECT a FROM Annuaire a")
+@JsonIdentityInfo(generator=JSOGGenerator.class)
 public class Annuaire implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ann_id")
-	private String annId;
+	private Long annId;
 
 	@Lob
 	@Column(name="ann_adr_perso")
@@ -37,21 +42,14 @@ public class Annuaire implements Serializable {
 	private String annAdrPro;
 
 	@Column(name="ann_civ")
+	@Enumerated(EnumType.STRING)
 	private Civ annCiv;
-
-
 
 	@Column(name="ann_comp_gen_hal")
 	private String annCompGenHal;
 
 	@Column(name="ann_comp_gen_lk")
 	private String annCompGenLk;
-
-
-
-
-
-
 
 	@Column(name="ann_comp_gen_url")
 	private String annCompGenUrl;
@@ -65,12 +63,8 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_courriel2")
 	private String annCourriel2;
 
-
-
 	@Column(name="ann_hdr")
 	private byte annHdr;
-
-
 
 	@Column(name="ann_ldap_uid")
 	private String annLdapUid;
@@ -91,8 +85,6 @@ public class Annuaire implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Tutelles annLisTutelles;
 
-
-
 	@Column(name="ann_quotite_travail")
 	private byte annQuotiteTravail;
 
@@ -107,7 +99,6 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_tel_perso")
 	private String annTelPerso;
 
-
 	@ManyToOne
 	@JoinColumn(name = "referent")
 	private Annuaire referent;
@@ -115,14 +106,7 @@ public class Annuaire implements Serializable {
 	@OneToMany(mappedBy = "referent")
 	private List<Annuaire> personnels;
 
-
-
-
 	private int titulaire;
-
-
-
-
 
 	//bi-directional many-to-one association to LisBatiment
 	@ManyToOne
@@ -137,6 +121,7 @@ public class Annuaire implements Serializable {
 
 
 	//bi-directional many-to-one association to AnnuaireEquipe
+	@JsonIgnore
 	@OneToMany(mappedBy="annuaire")
 	private List<AnnuaireEquipe> annuaireEquipes;
 

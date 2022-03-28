@@ -24,7 +24,7 @@ import java.util.List;
 @Valid
 @NoArgsConstructor
 @NamedQuery(name="Annuaire.findAll", query="SELECT a FROM Annuaire a")
-@JsonIdentityInfo(generator=JSOGGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "annId")
 public class Annuaire implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -99,6 +99,7 @@ public class Annuaire implements Serializable {
 	@Column(name="ann_tel_perso")
 	private String annTelPerso;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "referent")
 	private Annuaire referent;

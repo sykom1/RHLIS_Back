@@ -17,6 +17,7 @@ import javax.validation.Valid;
 
 import com.amu.project_back.models.enume.Site;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -51,6 +52,7 @@ public class LisBatiment implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Site batSite;
 
+	@JsonIgnore
 	//bi-directional many-to-one association to Annuaire
 	@OneToMany(mappedBy="lisBatiment")
 	private List<Annuaire> annuaires;

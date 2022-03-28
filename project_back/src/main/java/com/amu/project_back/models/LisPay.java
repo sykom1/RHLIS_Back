@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -43,6 +46,7 @@ public class LisPay implements Serializable {
 	@Column(name="pays_telephone")
 	private String paysTelephone;
 
+	@JsonIgnore
 	//bi-directional many-to-one association to Annuaire
 	@OneToMany(mappedBy="lisPay")
 	private List<Annuaire> annuaires;

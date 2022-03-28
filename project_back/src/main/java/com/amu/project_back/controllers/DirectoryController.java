@@ -46,11 +46,7 @@ public class DirectoryController {
 
     @GetMapping(value = "/directories-teams")
     public List<AnnuaireEquipe> getAnnuaireEquipe() {
-    	List<AnnuaireEquipe> listAnnuaireEquipe = annrepo.findAll();
-//    	for(int i = 0 ; i <=) {
-//    		listAnnuaireEquipe.get(0).setAnnuaire(repo.findById(el.getAnnuaire().getAnnId()).get());
-//    	}
-        return listAnnuaireEquipe;
+        return annrepo.findAll();
     }
     
     @GetMapping(value = "/batiments")

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,8 +46,26 @@ public class DirectoryController {
     }
 
     @GetMapping(value = "/directories-teams")
-    public List<AnnuaireEquipe> getAnnuaireEquipe() {
-        return annrepo.findAll();
+    public List<AnnuaireEquipeBit> getAnnuaireEquipe() {
+    	List<AnnuaireEquipeBit> adaptedList = new ArrayList<>();
+    	List<AnnuaireEquipe> list = annrepo.findAllOrderByAnnuairerquipesidDesc();
+    	AnnuaireEquipeBit adaptedEl;
+    	for(AnnuaireEquipe el : list) {
+    		adaptedEl = new AnnuaireEquipeBit();
+    		adaptedEl.setId(el.getAnnuaireEquipesId());
+    		adaptedEl.setName(el.getAnnuaire().getUser().getFirstname() + " " + el.getAnnuaire().getUser().getLastname());
+    		adaptedEl.setEmail(el.getAnnuaire().getUser().getEmail());
+    		adaptedEl.setEquipe(el.getLisEquipe().getEquipesLabel());
+    		adaptedEl.setStatut(el.getLisStatut());
+    		adaptedEl.setArrive(el.getDateArrive().toString());
+    		adaptedEl.setLeave(el.getDateSortie().toString());
+    		adaptedEl.setPhone(el.getAnnuaire().getUser().getPhoneNumber());
+    		adaptedEl.setUserId(el.getAnnuaire().getUser().getId());
+    		adaptedEl.setCiv(el.getAnnuaire().getAnnCiv());
+    		adaptedList.add(adaptedEl);
+    	}
+    	
+        return adaptedList;
     }
     
     @GetMapping(value = "/batiments")
@@ -55,8 +74,36 @@ public class DirectoryController {
     }
     
     @GetMapping(value = "/directories-teams/{id}")
-    public List<AnnuaireEquipe> getAnnuaireEquipe(@PathVariable Long id) {
+    public AnnuaireEquipe getAnnuaireEquipe(@PathVariable Long id) {
+        return annrepo.findById(id).get();
+    }
+    
+    @GetMapping(value = "posts/directories-teams/{id}")
+    public List<AnnuaireEquipe> getAnnuaireEquipePosts(@PathVariable Long id) {
         return annrepo.findByAnnuaireAnnId(id);
+    }
+    
+    @GetMapping(value = "referent/{id}/directories-teams")
+    public List<AnnuaireEquipeBit> getAnnuaireEquipeByReferent(@PathVariable Long id) {
+    	List<AnnuaireEquipeBit> adaptedList = new ArrayList<>();
+    	List<AnnuaireEquipe> list = annrepo.findByAnnuaireReferentUserId(id);
+    	AnnuaireEquipeBit adaptedEl;
+    	for(AnnuaireEquipe el : list) {
+    		adaptedEl = new AnnuaireEquipeBit();
+    		adaptedEl.setId(el.getAnnuaireEquipesId());
+    		adaptedEl.setName(el.getAnnuaire().getUser().getFirstname() + " " + el.getAnnuaire().getUser().getLastname());
+    		adaptedEl.setEmail(el.getAnnuaire().getUser().getEmail());
+    		adaptedEl.setEquipe(el.getLisEquipe().getEquipesLabel());
+    		adaptedEl.setStatut(el.getLisStatut());
+    		adaptedEl.setArrive(el.getDateArrive().toString());
+    		adaptedEl.setLeave(el.getDateSortie().toString());
+    		adaptedEl.setPhone(el.getAnnuaire().getUser().getPhoneNumber());
+    		adaptedEl.setUserId(el.getAnnuaire().getUser().getId());
+    		adaptedEl.setCiv(el.getAnnuaire().getAnnCiv());
+    		adaptedList.add(adaptedEl);
+    	}
+    	
+        return adaptedList;
     }
 
     @GetMapping("/directories/{id}")
@@ -82,7 +129,7 @@ public class DirectoryController {
         return repo.save(annuaire);
     }
 
-    @GetMapping("/search")
+   /* @GetMapping("/search")
     public Iterable<Annuaire> getUsersBy(@PathParam("type") String type, @PathParam("name") String name ) {
         System.out.println(name);
         switch (type){
@@ -117,7 +164,7 @@ public class DirectoryController {
                 return null;
         }
 
-    }
+    }*/
 
 
 

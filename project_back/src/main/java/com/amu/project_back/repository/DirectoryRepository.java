@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface DirectoryRepository extends JpaRepository<Annuaire, Long> {
 
-    @Query("SELECT a from Annuaire a, AnnuaireEquipe ae, LisEquipe e where a.annId = ae.annuaire.annId and e.equipesId = ae.lisEquipe.equipesId and e.equipesLabel = :name")
+   /* @Query("SELECT a from Annuaire a, AnnuaireEquipe ae, LisEquipe e where a.annId = ae.annuaire.annId and e.equipesId = ae.lisEquipe.equipesId and e.equipesLabel = :name")
     List<Annuaire> findAllByAnnuaireEquipes_Label(@Param("name") String name);
 
 
@@ -29,7 +29,9 @@ public interface DirectoryRepository extends JpaRepository<Annuaire, Long> {
     List<Annuaire> findAllByDateA(@Param("name") Date name);
 
     @Query("SELECT a from Annuaire a join a.annuaireEquipes eq where eq.dateSortie = :name")
-    List<Annuaire> findAllByDateD(@Param("name") Date name);
+    List<Annuaire> findAllByDateD(@Param("name") Date name);*/
+	
+	
 
 
 }

@@ -71,6 +71,7 @@ public class AnnuaireEquipe implements Serializable {
 
 
 	@OneToOne
+	@JoinColumn(name = "doctorant_ann_comp_doc_id")
 	AnnuaireComplementDoctorant doctorant;
 
 

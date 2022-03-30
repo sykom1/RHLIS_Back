@@ -27,19 +27,19 @@ public class AnnuaireComplementDoctorant implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ann_comp_doc_id")
-	private String annCompDocId;
+	private Long annCompDocId;
 
 	@Column(name="ann_comp_doc_ann_id")
 	private BigInteger annCompDocAnnId;
 
 	@Column(name="ann_comp_doc_codir_these_lis")
-	private BigInteger annCompDocCodirTheseLis;
+	private String annCompDocCodirTheseLis;
 
 	@Column(name="ann_comp_doc_codir_these_nlis")
 	private String annCompDocCodirTheseNlis;
 
 	@Column(name="ann_comp_doc_dir_these_lis")
-	private BigInteger annCompDocDirTheseLis;
+	private String annCompDocDirTheseLis;
 
 	@Column(name="ann_comp_doc_dir_these_nlis")
 	private String annCompDocDirTheseNlis;
@@ -65,6 +65,4 @@ public class AnnuaireComplementDoctorant implements Serializable {
 	@JoinColumn(name="lis_ed_lis_ed_id")
 	private LisEd lisEd;
 
-	@OneToOne
-	AnnuaireEquipe equipe;
 }

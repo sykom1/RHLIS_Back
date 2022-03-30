@@ -2,11 +2,14 @@ package com.amu.project_back.controllers;
 
 
 import com.amu.project_back.models.*;
+import com.amu.project_back.models.enume.LisStatus;
 import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -39,6 +42,12 @@ public class DirectoryController {
     
     @Autowired
     LisBatimentRepository lisBatimentRepository;
+    
+    @Autowired
+    LisEdRepository lisEdRepository;
+    
+    @Autowired
+    AnnuaireComplementDoctorantRepository annuaireComplementDoctorantRepository;
 
     @GetMapping(value = "/directories")
     public Iterable<Annuaire> getAnnuaire() {
@@ -75,12 +84,22 @@ public class DirectoryController {
     
     @GetMapping(value = "/directories-teams/{id}")
     public AnnuaireEquipe getAnnuaireEquipe(@PathVariable Long id) {
-        return annrepo.findById(id).get();
+        return annrepo.findOneByIdentifier(id);
     }
     
     @GetMapping(value = "posts/directories-teams/{id}")
     public List<AnnuaireEquipe> getAnnuaireEquipePosts(@PathVariable Long id) {
         return annrepo.findByAnnuaireAnnId(id);
+    }
+    
+    @GetMapping(value = "/directories-teams/new")
+    public List<AnnuaireEquipe> getAnnuaireEquipePosts() {
+        return annrepo.findByAnnuaireUserIsnewTrue();
+    }
+    
+    @GetMapping(value = "/ecole-doc")
+    public List<LisEd> getDocEcoles(){
+    	return lisEdRepository.findAll();
     }
     
     @GetMapping(value = "referent/{id}/directories-teams")
@@ -111,6 +130,25 @@ public class DirectoryController {
         return repo.findById(id).get();
     }
 
+    @Transactional
+    @PutMapping("/directories-teams/{id}")
+    public void updateAnnuaireEquipe(@PathVariable Long id, @RequestBody AnnuaireEquipe annuaireEquipe) {
+    	
+    	AnnuaireEquipe old = annrepo.findOneByIdentifier(id);
+    	old.setLisStatut(annuaireEquipe.getLisStatut());
+    	if(annuaireEquipe.getLisStatut().equals(LisStatus.Stagiaire)) {
+    		old.setDiplome(annuaireEquipe.getDiplome());
+    	}
+    	if(annuaireEquipe.getLisStatut().equals(LisStatus.Doctorant)) {
+    		AnnuaireComplementDoctorant aCD = annuaireComplementDoctorantRepository.save(annuaireEquipe.getDoctorant());
+    		old.setDoctorant(aCD);
+    	}
+    	Utilisateur user = userrepo.findById(annuaireEquipe.getAnnuaire().getUser().getId()).get();
+    	user.setIsnew(false);
+    	userrepo.save(user);
+    	annrepo.save(old);
+    	
+    }
 
 
     @PutMapping(value = "/directories/{id}")

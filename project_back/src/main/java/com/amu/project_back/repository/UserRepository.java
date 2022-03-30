@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<Utilisateur, Long> {
 
     List<Utilisateur> findAllByRoleLike(UserRole role);
 
+    List<Utilisateur> findAllByIsnewTrueAndRoleNot(UserRole role);
+
 }

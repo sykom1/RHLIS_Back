@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -24,7 +27,7 @@ public class LisEd implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="lis_ed_id")
-	private String lisEdId;
+	private Long lisEdId;
 
 	@Column(name="lis_ed_code_etablissement")
 	private String lisEdCodeEtablissement;
@@ -41,6 +44,7 @@ public class LisEd implements Serializable {
 	@Column(name="lis_ed_sigle")
 	private String lisEdSigle;
 
+	@JsonIgnore
 	//bi-directional many-to-one association to AnnuaireComplementDoctorant
 	@OneToMany(mappedBy="lisEd")
 	private List<AnnuaireComplementDoctorant> annuaireComplementDoctorants;

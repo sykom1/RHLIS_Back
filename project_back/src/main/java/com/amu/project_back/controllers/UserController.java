@@ -1,48 +1,51 @@
 package com.amu.project_back.controllers;
 
-import com.amu.project_back.dto.UtilisateursDTO;
+
+import com.amu.project_back.exception.ExceptionsHandler;
 import com.amu.project_back.models.*;
+import com.amu.project_back.models.enume.Cnu;
 import com.amu.project_back.models.enume.UserRole;
 import com.amu.project_back.repository.*;
+import com.amu.project_back.services.NotificationService;
 import com.amu.project_back.util.JwtUtil;
-import org.aspectj.weaver.AnnotationNameValuePair;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.websocket.server.PathParam;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class UserController {
-
+public class UserController extends ExceptionsHandler {
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
     UserRepository repo;
+    
+    @Autowired
+    DirectoryRepository directoryRepository;
+    
+    @Autowired
+    AnnuaireEquipeRepository annuaireEquipeRepository;
 
     @Autowired
     UserDetailsService userDetailsService;
-
-    @Autowired
-    LisEquipeRepository eqrepo;
 
     @Autowired
     TokenEntityRepository tokenEntityRepository;
@@ -50,27 +53,28 @@ public class UserController {
     @Autowired
     JwtUtil jwtTokenUtil;
 
-    @Autowired
-    LisPoleRepository polerepo;
 
     @Autowired
-    AnnuaireEquipeRepository annrepo;
+    NotificationService notificationService;
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-/*
-   @PostConstruct
-    public void init() {
 
-        Utilisateur user = new Utilisateur("john@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "0600000001");
+
+    /*
+   @PostConstruct
+   public void init() {
+
+
+        Utilisateur user = new Utilisateur("john@gmail.com", passwordEncoder.encode("john"), UserRole.UTILISATEUR, "john", "dough", new Date(), "0600051001");
+        repo.save(user);
         Utilisateur ref = new Utilisateur("ref@gmail.com", passwordEncoder.encode("ref"), UserRole.REFERENT, "ref", "boo", new Date(), "0600000002");
         Utilisateur service = new Utilisateur("service@gmail.com", passwordEncoder.encode("service"), UserRole.SERVICE_ADMINISTRATIF_FINANCIER, "service", "financier", new Date(), "0600000000");
         Utilisateur admin = new Utilisateur("admin@gmail.com", passwordEncoder.encode("admin"), UserRole.ADMIN, "admin", "admin", new Date(), "0600000008");
-        repo.save(user);
         repo.save(ref);
         repo.save(service);
         repo.save(admin);
-    } */
+    }*/
 
 
     @GetMapping(value = "/users")
@@ -80,7 +84,7 @@ public class UserController {
 
     @GetMapping(value = "/users/{id}")
     public Utilisateur getUser(@PathVariable Integer id) {
-        return repo.getById(Long.valueOf(id));
+        return repo.findById(Long.valueOf(id)).get();
     }
 
     @GetMapping(value = "/referent/users/{id}")
@@ -88,30 +92,59 @@ public class UserController {
         return repo.getById(Long.valueOf(id));
     }
 
-
+    @Transactional
     @PutMapping(value = "/users/{id}")
-    public Utilisateur modifyUser(@PathVariable Integer id,@RequestBody UtilisateursDTO userDTO) {
-        ModelMapper mapper = new ModelMapper();
-        Utilisateur newUser = mapper.map(userDTO, Utilisateur.class);
+    public Utilisateur modifyUser(@PathVariable Integer id,@RequestBody Utilisateur newUser) {
         Utilisateur oldUser = repo.findById(Long.valueOf(id)).get();
-        oldUser.setUser(newUser);
+        Annuaire oldAnnuaire = directoryRepository.findById(newUser.getDirectory().getAnnId()).get();
+        oldAnnuaire.setAnnuaire(newUser.getDirectory());
+        directoryRepository.save(oldAnnuaire);
+        oldUser.setPhoneNumber(newUser.getPhoneNumber());
         return repo.save(oldUser);
     }
 
+    
+
+    @Transactional
     @PostMapping(value = "/users")
-    public Utilisateur saveUser(@RequestBody UtilisateursDTO userDTO) {
-        ModelMapper mapper = new ModelMapper();
-        Utilisateur user = mapper.map(userDTO, Utilisateur.class);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return repo.save(user);
+    public AnnuaireEquipe saveUser(@RequestBody AnnuaireEquipe annuaireEquipe, @RequestParam Long id) {
+    	//enregistrer l'utilisateur en premier
+    	Utilisateur user = annuaireEquipe.getAnnuaire().getUser();
+        user.setPassword(passwordEncoder.encode(user.getEmail()));
+        user = repo.save(user); 
+        
+        //enregistrer l'annuaire
+        Annuaire ref = directoryRepository.findById(id).get();
+        Annuaire annuaire = annuaireEquipe.getAnnuaire();
+        annuaire.setReferent(ref);
+        annuaire.setUser(user);
+        annuaire = directoryRepository.save(annuaire);
+        
+        //enregistrer l'annuaire dans utilisateur
+        user.setDirectory(annuaire);
+        user = repo.save(user);
+        
+        //enregister dans annuaire-equipe
+        annuaireEquipe.setAnnuaire(annuaire);
+        annuaireEquipe = annuaireEquipeRepository.save(annuaireEquipe);
+        
+        //notifier le service administratif
+        notificationService.notifyAllSAF(user.getEmail(),ref.getUser().getFirstname() + " " + ref.getUser().getLastname());
+        
+        return annuaireEquipe;
     }
 
+    @GetMapping(value = "/users/ref/{id}")
+    public Iterable<Annuaire> getUsersByRef(@PathVariable long id){
+        Annuaire ref = directoryRepository.getById(id);
+        return ref.getPersonnels();
 
-   /* @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return repo.findById(id).get();
-    } */
+    }
 
+    @GetMapping(value = "/users/new")
+    public Iterable<Utilisateur> getNewUsers(){
+        return repo.findAllByIsnewTrueAndRoleNot(UserRole.ADMIN);
+    }
 
 
     @DeleteMapping("/users/{id}")
@@ -151,76 +184,21 @@ public class UserController {
             Integer tokenId = tokenEnt.getId();
             tokenEntityRepository.deleteById(tokenId);
         }
-        return ResponseEntity.ok("Déconnexion réussite");
+
+        return ResponseEntity.ok("");
     }
 
 
-    @GetMapping("/search")
-    public Iterable<Utilisateur> getUsersBy(@PathParam("type") String type, @PathParam("name") String name ) {
-
-        switch (type){
-            case "role" : {
-               return repo.findAllByRoleLike(UserRole.valueOf(name));
-            }
-            case "datea" : {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
-                LocalDate localdate = LocalDate.parse(name, formatter);
-                java.sql.Date date =  java.sql.Date.valueOf(localdate);
-                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateArrive(date);
-                List<Utilisateur> users = new ArrayList<>();
-                for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
-                    users.add(annuaireEquipe.getAnnuaire().getUser());
-                }
-                return users;
-            }
-            case "dated" : {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.FRENCH);
-                LocalDate localdate = LocalDate.parse(name, formatter);
-                java.sql.Date date =  java.sql.Date.valueOf(localdate);
-                List<AnnuaireEquipe> annuaireEquipes = annrepo.findAllByDateSortie(date);
-                List<Utilisateur> users = new ArrayList<>();
-                for(AnnuaireEquipe annuaireEquipe : annuaireEquipes){
-                    users.add(annuaireEquipe.getAnnuaire().getUser());
-                }
-                return users;
-            }
-            case "team" : {
-                List<LisEquipe> teams = eqrepo.findAllByEquipesLabel(name);
-                List<Utilisateur> users = new ArrayList<>();
-                for (LisEquipe team : teams){
-                    Utilisateur temp = team.getAnnuaireEquipe().getAnnuaire().getUser();
-                    if(!users.contains(temp)){
-                        users.add(temp);
-                    }
-
-                }
-                return users;
-            }
-            case "pole" : {
-                List<LisPole> poles = polerepo.findAllByName(name);
-                List<Utilisateur> users = new ArrayList<>();
-                for(LisPole pole : poles){
-                    for(LisEquipe eq : pole.getLisEquipes()){
-                        Utilisateur temp =eq.getAnnuaireEquipe().getAnnuaire().getUser();
-                        if(!users.contains(temp)){
-                            users.add(temp);
-                        }
-                    }
-                }
-                return users;
-            }
-            default:
-                return null;
+    @PutMapping(value = "/users/{id}/password")
+    public ResponseEntity<?> modifyPassword(@PathVariable long id, @RequestBody Map<String, String> passwords) {
+        Utilisateur user = repo.findById(id).get();
+        if(!passwords.get("newPassword").equals(passwords.get("confirmNewPassword"))) {
+            return new ResponseEntity<>("Mot de passe et la confirmation ne sont pas identiques", HttpStatus.CONFLICT);
         }
-
+        user.setPassword(passwordEncoder.encode(passwords.get("newPassword")));
+        repo.save(user);
+        return ResponseEntity.ok("");
     }
 
-
-
-
-
-
-
-       
 
 }

@@ -1,7 +1,9 @@
 package com.amu.project_back.models;
 
 import com.amu.project_back.models.enume.UserRole;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -26,6 +29,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name="utilisateurs")
 @NamedQuery(name="Utilisateur.findAll", query="SELECT u FROM Utilisateur u")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Utilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -46,16 +50,16 @@ public class Utilisateur implements Serializable {
 	@JsonIgnore
 	private String password;
 
-	
+	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
 	@NotBlank(message = "Le nom est obligatoire !")
 	private String lastname;
 
-
 	@NotBlank(message = "Le prenom est obligatoire !")
 	private String firstname;
 
+	@Temporal(TemporalType.DATE)
 	private Date birthday;
 
 	@Pattern(regexp="(^$|[0-9]{10})",message = "le numéro de téléphone doit contenir 10 chiffres")
@@ -64,6 +68,11 @@ public class Utilisateur implements Serializable {
 
 	@OneToOne
 	private Annuaire directory;
+
+	@OneToMany(mappedBy="destinataire",fetch = FetchType.LAZY)
+	private List<Notification> notifications;
+
+	private boolean isnew = true;
 
 
 	public Utilisateur(@NotBlank(message = "L'email est obligatoire !") String email,
